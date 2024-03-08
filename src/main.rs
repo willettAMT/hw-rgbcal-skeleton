@@ -19,6 +19,7 @@ use microbit_bsp::{
         saadc,
     },
     Microbit,
+    Button,
 };
 
 type Adc = saadc::Saadc<'static, 1>;
@@ -36,7 +37,9 @@ impl Knob {
         self.0.sample(&mut buf).await;
         let raw = buf[0].clamp(0, 0x7fff) as u16;
         let scaled = raw as f32 / 10_000.0;
-        let result = (9.0 * scaled - 2.0).clamp(0.0, 7.0).floor();
+        let result = ((LEVELS + 2) as f32  * scaled - 2.0)
+            .clamp(0.0, (LEVELS - 1) as f32)
+            .floor();
         result as u32
     }
 }
@@ -44,7 +47,7 @@ impl Knob {
 type RgbPins = [Output<'static, AnyPin>; 3];
 
 static RGB_LEVELS: Mutex<ThreadModeRawMutex, [u32; 3]> = Mutex::new([0; 3]);
-const LEVELS: u32 = 8;
+const LEVELS: u32 = 16;
 
 async fn get_rgb_levels() -> [u32; 3] {
     let rgb_levels = RGB_LEVELS.lock().await;
@@ -55,7 +58,7 @@ async fn set_rgb_levels<F>(setter: F)
     where F: FnOnce(&mut [u32; 3])
 {
     let mut rgb_levels = RGB_LEVELS.lock().await;
-    setter(&mut *rgb_levels);
+    setter(&mut rgb_levels);
 }
 
 struct Rgb {
@@ -97,29 +100,68 @@ impl Rgb {
         self.tick = (self.tick + 1) % (3 * LEVELS);
         Timer::after(self.tick_time).await;
     }
-}
 
-async fn run_rgb(mut rgb: Rgb) -> ! {
-    loop {
-        rgb.step().await;
+    async fn run(mut self) -> ! {
+        loop {
+            self.step().await;
+        }
     }
 }
 
-async fn run_ui(mut knob: Knob) -> ! {
-    let mut last_brightness = knob.measure().await;
-    rprintln!("{}", last_brightness);
-    loop {
-        let brightness = knob.measure().await;
-        if brightness != last_brightness {
-            rprintln!("{}", brightness);
-            set_rgb_levels(|rgb| {
-                for c in rgb {
-                    *c = brightness;
-                }
-            }).await;
+struct UiState {
+    levels: [u32; 3],
+    frame_rate: u64,
+}
+
+impl UiState {
+    fn show(&self) {
+        let names = ["red", "green", "blue"];
+        rprintln!();
+        for (name, level) in names.iter().zip(self.levels.iter()) {
+            rprintln!("{}: {}", name, level);
         }
-        last_brightness = brightness;
-        Timer::after_millis(100).await;
+        rprintln!("frame rate: {}", self.frame_rate);
+    }
+}
+
+impl Default for UiState {
+    fn default() -> Self {
+        Self {
+            levels: [LEVELS - 1, LEVELS - 1, LEVELS - 1],
+            frame_rate: 100,
+        }
+    }
+}
+
+struct Ui {
+    knob: Knob,
+    _button_a: Button,
+    _button_b: Button,
+    state: UiState,
+}
+
+impl Ui {
+    fn new(knob: Knob, _button_a: Button, _button_b: Button) -> Self {
+        Self { knob, _button_a, _button_b, state: UiState::default() }
+    }
+
+    async fn run(&mut self) -> ! {
+        self.state.levels[2] = self.knob.measure().await;
+        set_rgb_levels(|rgb| {
+            *rgb = self.state.levels;
+        }).await;
+        self.state.show();
+        loop {
+            let level = self.knob.measure().await;
+            if level != self.state.levels[2] {
+                self.state.levels[2] = level;
+                self.state.show();
+                set_rgb_levels(|rgb| {
+                    *rgb = self.state.levels;
+                }).await;
+            }
+            Timer::after_millis(50).await;
+        }
     }
 }
 
@@ -147,10 +189,11 @@ async fn main(_spawner: Spawner) -> ! {
         [saadc::ChannelConfig::single_ended(board.p2)],
     );
     let knob = Knob::new(saadc).await;
+    let mut ui = Ui::new(knob, board.btn_a, board.btn_b);
 
     join::join(
-        run_rgb(rgb),
-        run_ui(knob),
+        rgb.run(),
+        ui.run(),
     ).await;
 
     panic!("fell off end of main loop");
