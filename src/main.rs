@@ -4,6 +4,10 @@
 use defmt_rtt as _;
 use embassy_executor::Spawner;
 use embassy_time::{Duration, Timer};
+use embassy_sync::{
+    mutex::Mutex,
+    blocking_mutex::raw::ThreadModeRawMutex,
+};
 use microbit_bsp::{
     embassy_nrf::{
         bind_interrupts,
@@ -33,8 +37,23 @@ impl Knob {
 
 type RgbPins = [Output<'static, AnyPin>; 3];
 
+static RGB_LEVELS: Mutex<ThreadModeRawMutex, [u32; 3]> = Mutex::new([0; 3]);
+
+async fn get_rgb_levels() -> [u32; 3] {
+    let rgb_levels = RGB_LEVELS.lock().await;
+    *rgb_levels
+}
+
+async fn set_rgb_levels<F>(setter: F)
+    where F: FnOnce(&mut [u32; 3])
+{
+    let mut rgb_levels = RGB_LEVELS.lock().await;
+    setter(&mut *rgb_levels);
+}
+
 struct Rgb<const LEVELS: u32> {
     rgb: RgbPins,
+    // Shadow array to minimize lock contention.
     levels: [u32; 3],
     tick: u32,
     tick_time: Duration,
@@ -47,13 +66,17 @@ impl<const LEVELS: u32> Rgb<LEVELS> {
 
     fn new(rgb: RgbPins, frame_rate: u64) -> Self {
         let tick_time = Self::frame_tick_time(frame_rate);
-        Self { rgb, levels: [0, 0, 0], tick: 0, tick_time }
+        Self { rgb, levels: [0; 3], tick: 0, tick_time }
     }
 
     async fn step(&mut self) {
         let led = self.tick / LEVELS;
         let level = self.tick % LEVELS;
         if level == 0 {
+            if led == 0 {
+                self.levels = get_rgb_levels().await;
+            }
+
             let prev = (led + 2) % 3;
             if self.rgb[prev as usize].is_set_high() {
                 self.rgb[prev as usize].set_low();
@@ -66,12 +89,6 @@ impl<const LEVELS: u32> Rgb<LEVELS> {
         }
         self.tick = (self.tick + 1) % (3 * LEVELS);
         Timer::after(self.tick_time).await;
-    }
-
-    fn set_rgb<F>(&mut self, setter: F)
-        where F: FnOnce(&mut [u32; 3])
-    {
-        setter(&mut self.levels);
     }
 }
 
@@ -99,11 +116,11 @@ async fn main(_spawner: Spawner) -> ! {
     );
     let _knob = Knob::new(saadc).await;
 
-    rgb.set_rgb(|rgb| {
+    set_rgb_levels(|rgb| {
         for color in rgb {
             *color = 7;
         }
-    });
+    }).await;
     loop {
         rgb.step().await;
     }
