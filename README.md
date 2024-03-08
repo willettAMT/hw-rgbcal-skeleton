@@ -37,8 +37,8 @@ Connect the potentiometer (knob) to the MB2 as follows:
 
 ## UI
 
-* No buttons held: Change the frame rate in steps of 10 fps
-  from 10..160.
+* No buttons held: Change the frame rate in steps of 10
+  frames per second from 10..160.
 * A button held: Change the blue level from off to on over
   16 steps.
 * B button held: Change the green level from off to on over
