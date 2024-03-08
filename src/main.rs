@@ -2,6 +2,7 @@
 #![no_main]
 
 use num_traits::float::FloatCore;
+use defmt::println;
 use defmt_rtt as _;
 use embassy_executor::Spawner;
 use embassy_time::{Duration, Timer};
@@ -33,8 +34,10 @@ impl Knob {
     async fn measure(&mut self) -> u32 {
         let mut buf = [0];
         self.0.sample(&mut buf).await;
-        let reading = buf[0].clamp(0, 0x3fff) as f32 / 0x3fff as f32;
-        (7 as f32 * reading + 0.5).floor() as u32
+        let raw = buf[0].clamp(0, 0x7fff) as u16;
+        let scaled = raw as f32 / 10_000.0;
+        let result = (9.0 * scaled - 2.0).clamp(0.0, 7.0).floor();
+        result as u32
     }
 }
 
@@ -103,13 +106,19 @@ async fn run_rgb(mut rgb: Rgb) -> ! {
 }
 
 async fn run_ui(mut knob: Knob) -> ! {
+    let mut last_brightness = knob.measure().await;
+    println!("{}", last_brightness);
     loop {
         let brightness = knob.measure().await;
-        set_rgb_levels(|rgb| {
-            for c in rgb {
-                *c = brightness;
-            }
-        }).await;
+        if brightness != last_brightness {
+            println!("{}", brightness);
+            set_rgb_levels(|rgb| {
+                for c in rgb {
+                    *c = brightness;
+                }
+            }).await;
+        }
+        last_brightness = brightness;
         Timer::after_millis(100).await;
     }
 }
