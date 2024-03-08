@@ -11,23 +11,19 @@ pub use ui::*;
 use panic_rtt_target as _;
 use rtt_target::{rprintln, rtt_init_print};
 
-use num_traits::float::FloatCore;
 use embassy_executor::Spawner;
-use embassy_time::{Duration, Timer};
-use embassy_sync::{
-    mutex::Mutex,
-    blocking_mutex::raw::ThreadModeRawMutex,
-};
 use embassy_futures::join;
+use embassy_sync::{blocking_mutex::raw::ThreadModeRawMutex, mutex::Mutex};
+use embassy_time::{Duration, Timer};
 use microbit_bsp::{
     embassy_nrf::{
         bind_interrupts,
         gpio::{AnyPin, Level, Output, OutputDrive},
         saadc,
     },
-    Microbit,
-    Button,
+    Button, Microbit,
 };
+use num_traits::float::FloatCore;
 
 pub static RGB_LEVELS: Mutex<ThreadModeRawMutex, [u32; 3]> = Mutex::new([0; 3]);
 pub const LEVELS: u32 = 16;
@@ -38,7 +34,8 @@ async fn get_rgb_levels() -> [u32; 3] {
 }
 
 async fn set_rgb_levels<F>(setter: F)
-    where F: FnOnce(&mut [u32; 3])
+where
+    F: FnOnce(&mut [u32; 3]),
 {
     let mut rgb_levels = RGB_LEVELS.lock().await;
     setter(&mut rgb_levels);
@@ -70,10 +67,7 @@ async fn main(_spawner: Spawner) -> ! {
     let knob = Knob::new(saadc).await;
     let mut ui = Ui::new(knob, board.btn_a, board.btn_b);
 
-    join::join(
-        rgb.run(),
-        ui.run(),
-    ).await;
+    join::join(rgb.run(), ui.run()).await;
 
     panic!("fell off end of main loop");
 }

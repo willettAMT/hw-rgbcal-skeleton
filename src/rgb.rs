@@ -17,7 +17,12 @@ impl Rgb {
 
     pub fn new(rgb: RgbPins, frame_rate: u64) -> Self {
         let tick_time = Self::frame_tick_time(frame_rate);
-        Self { rgb, levels: [0; 3], tick: 0, tick_time }
+        Self {
+            rgb,
+            levels: [0; 3],
+            tick: 0,
+            tick_time,
+        }
     }
 
     async fn step(&mut self) {

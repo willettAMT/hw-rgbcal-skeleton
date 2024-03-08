@@ -34,14 +34,20 @@ pub struct Ui {
 
 impl Ui {
     pub fn new(knob: Knob, _button_a: Button, _button_b: Button) -> Self {
-        Self { knob, _button_a, _button_b, state: UiState::default() }
+        Self {
+            knob,
+            _button_a,
+            _button_b,
+            state: UiState::default(),
+        }
     }
 
     pub async fn run(&mut self) -> ! {
         self.state.levels[2] = self.knob.measure().await;
         set_rgb_levels(|rgb| {
             *rgb = self.state.levels;
-        }).await;
+        })
+        .await;
         self.state.show();
         loop {
             let level = self.knob.measure().await;
@@ -50,7 +56,8 @@ impl Ui {
                 self.state.show();
                 set_rgb_levels(|rgb| {
                     *rgb = self.state.levels;
-                }).await;
+                })
+                .await;
             }
             Timer::after_millis(50).await;
         }
