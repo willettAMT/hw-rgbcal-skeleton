@@ -11,6 +11,7 @@ cortex-m-rt = "0.7.0"
 microbit-bsp = "0.3.0"
 embassy-sync = { version = "0.5.0", features = ["defmt"] }
 embassy-futures = { version = "0.1.1", features = ["defmt"] }
+num-traits = { version = "0.2.18", default-features = false, features = ["libm"] }
 
 [dependencies.embassy-executor]
 version = "0.5.0"

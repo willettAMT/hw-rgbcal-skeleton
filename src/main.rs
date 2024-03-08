@@ -1,6 +1,7 @@
 #![no_std]
 #![no_main]
 
+use num_traits::float::FloatCore;
 use defmt_rtt as _;
 use embassy_executor::Spawner;
 use embassy_time::{Duration, Timer};
@@ -29,10 +30,11 @@ impl Knob {
         Self(adc)
     }
 
-    async fn _measure(&mut self) -> f32 {
+    async fn measure(&mut self) -> u32 {
         let mut buf = [0];
         self.0.sample(&mut buf).await;
-        buf[0].clamp(0, 0x7fff) as f32 / 0x7fff as f32
+        let reading = buf[0].clamp(0, 0x3fff) as f32 / 0x3fff as f32;
+        (7 as f32 * reading + 0.5).floor() as u32
     }
 }
 
@@ -46,7 +48,7 @@ async fn get_rgb_levels() -> [u32; 3] {
     *rgb_levels
 }
 
-async fn _set_rgb_levels<F>(setter: F)
+async fn set_rgb_levels<F>(setter: F)
     where F: FnOnce(&mut [u32; 3])
 {
     let mut rgb_levels = RGB_LEVELS.lock().await;
@@ -100,8 +102,16 @@ async fn run_rgb(mut rgb: Rgb) -> ! {
     }
 }
 
-async fn run_ui(_knob: Knob) -> ! {
-    todo!()
+async fn run_ui(mut knob: Knob) -> ! {
+    loop {
+        let brightness = knob.measure().await;
+        set_rgb_levels(|rgb| {
+            for c in rgb {
+                *c = brightness;
+            }
+        }).await;
+        Timer::after_millis(100).await;
+    }
 }
 
 #[embassy_executor::main]
