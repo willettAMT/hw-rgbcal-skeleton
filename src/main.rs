@@ -14,7 +14,7 @@ use rtt_target::{rprintln, rtt_init_print};
 use embassy_executor::Spawner;
 use embassy_futures::join;
 use embassy_sync::{blocking_mutex::raw::ThreadModeRawMutex, mutex::Mutex};
-use embassy_time::{Duration, Timer};
+use embassy_time::Timer;
 use microbit_bsp::{
     embassy_nrf::{
         bind_interrupts,
