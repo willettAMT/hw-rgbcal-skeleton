@@ -5,33 +5,43 @@ name = "mb2-embassy-rgb"
 version = "0.1.0"
 
 [dependencies]
-defmt = "0.3.0"
-defmt-rtt = "0.3.0"
 cortex-m-rt = "0.7.0"
-microbit-bsp = "0.3.0"
-embassy-sync = { version = "0.5.0", features = ["defmt"] }
-embassy-futures = { version = "0.1.1", features = ["defmt"] }
-num-traits = { version = "0.2.18", default-features = false, features = ["libm"] }
+rtt-target = "0.4"
 
-[dependencies.embassy-executor]
+[dependencies.panic-rtt-target]
+version = "0.1"
+features = ["cortex-m"]
+
+[dependencies.microbit-bsp]
+version = "0.3.1-pre"
+git = "http://github.com/BartMassey-upstream/microbit-bsp"
+branch = "omit-defmt"
+default-features = false
+
+[dependencies.embassy-futures]
+version = "0.1.1"
+default-features = false
+
+[dependencies.embassy-sync]
 version = "0.5.0"
-features = ["defmt", "integrated-timers", "arch-cortex-m", "executor-thread"]
+default-features = false
 
 [dependencies.embassy-time]
 version = "0.3.0"
-features = ["defmt"]
+default-features = false
 
-[dependencies.embassy-nrf]
-version = "0.1.0"
-features = ["defmt", "nrf52833", "time-driver-rtc1", "gpiote", "nfc-pins-as-gpio"]
+[dependencies.num-traits]
+version = "0.2.18"
+default-features = false
+features = ["libm"]
+
+[dependencies.embassy-executor]
+version = "0.5.0"
+features = ["integrated-timers", "arch-cortex-m", "executor-thread"]
 
 [dependencies.cortex-m]
 version = "0.7.0"
 features = ["critical-section-single-core"]
-
-[dependencies.panic-probe]
-version = "0.3.0"
-features = ["print-defmt"]
 
 [profile.release]
 debug = 2

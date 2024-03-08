@@ -1,9 +1,10 @@
 #![no_std]
 #![no_main]
 
+use panic_rtt_target as _;
+use rtt_target::{rprintln, rtt_init_print};
+
 use num_traits::float::FloatCore;
-use defmt::println;
-use defmt_rtt as _;
 use embassy_executor::Spawner;
 use embassy_time::{Duration, Timer};
 use embassy_sync::{
@@ -19,7 +20,6 @@ use microbit_bsp::{
     },
     Microbit,
 };
-use panic_probe as _;
 
 type Adc = saadc::Saadc<'static, 1>;
 
@@ -107,11 +107,11 @@ async fn run_rgb(mut rgb: Rgb) -> ! {
 
 async fn run_ui(mut knob: Knob) -> ! {
     let mut last_brightness = knob.measure().await;
-    println!("{}", last_brightness);
+    rprintln!("{}", last_brightness);
     loop {
         let brightness = knob.measure().await;
         if brightness != last_brightness {
-            println!("{}", brightness);
+            rprintln!("{}", brightness);
             set_rgb_levels(|rgb| {
                 for c in rgb {
                     *c = brightness;
@@ -125,6 +125,7 @@ async fn run_ui(mut knob: Knob) -> ! {
 
 #[embassy_executor::main]
 async fn main(_spawner: Spawner) -> ! {
+    rtt_init_print!();
     let board = Microbit::default();
 
     bind_interrupts!(struct Irqs {
