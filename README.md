@@ -40,7 +40,8 @@ Connect the potentiometer (knob) to the MB2 as follows:
 The knob controls the individual settings: frame rate and
 color levels. Which parameter the knob controls should be
 determined by which buttons are held. (Right now, the knob
-jus always controls Blue.)
+jus always controls Blue. You should see the color change
+from green to teal-blue as you turn the knob clockwise.)
 
 * No buttons held: Change the frame rate in steps of 10
   frames per second from 10..160.
