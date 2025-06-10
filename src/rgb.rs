@@ -7,6 +7,7 @@ pub struct Rgb {
     // Shadow variables to minimize lock contention.
     levels: [u32; 3],
     tick_time: u64,
+    current_frame_rate: u64,
 }
 
 impl Rgb {
@@ -20,6 +21,7 @@ impl Rgb {
             rgb,
             levels: [0; 3],
             tick_time,
+            current_frame_rate: frame_rate,
         }
     }
 
@@ -42,6 +44,12 @@ impl Rgb {
         loop {
             self.levels = get_rgb_levels().await;
 
+            let new_frame_rate = get_frame_rate().await;
+            if new_frame_rate != self.current_frame_rate {
+                self.current_frame_rate = new_frame_rate;
+                self.tick_time = Self::frame_tick_time(new_frame_rate);
+                rprintln!("RGB: Frame rate updated to {} fps", new_frame_rate);
+            }
             for led in 0..3 {
                 self.step(led).await;
             }

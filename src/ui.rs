@@ -128,6 +128,7 @@ impl Ui {
                 .await;
 
                 if matches!(parameter, ControlParameter::FrameRate) {
+                    set_frame_rate(|rate| *rate = self.state.frame_rate).await;
                     rprintln!("Frame rate changed to : {} fps", self.state.frame_rate);
                 }
             }

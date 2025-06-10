@@ -26,6 +26,7 @@ use microbit_bsp::{
 use num_traits::float::FloatCore;
 
 pub static RGB_LEVELS: Mutex<ThreadModeRawMutex, [u32; 3]> = Mutex::new([0; 3]);
+pub static FRAME_RATE: Mutex<ThreadModeRawMutex, u64> = Mutex::new(100);
 pub const LEVELS: u32 = 16;
 
 async fn get_rgb_levels() -> [u32; 3] {
@@ -41,6 +42,19 @@ where
     setter(&mut rgb_levels);
 }
 
+async fn get_frame_rate() -> u64 {
+    let frame_rate = FRAME_RATE.lock().await;
+    *frame_rate
+}
+
+async fn set_frame_rate<F>(setter: F)
+where
+    F: FnOnce(&mut u64),
+{
+    let mut frame_rate = FRAME_RATE.lock().await;
+    setter(&mut frame_rate);
+}
+
 #[embassy_executor::main]
 async fn main(_spawner: Spawner) -> ! {
     rtt_init_print!();
@@ -54,7 +68,8 @@ async fn main(_spawner: Spawner) -> ! {
     let red = led_pin(AnyPin::from(board.p9));
     let green = led_pin(AnyPin::from(board.p8));
     let blue = led_pin(AnyPin::from(board.p16));
-    let rgb: Rgb = Rgb::new([red, green, blue], 100);
+    let initial_frame_rate = get_frame_rate().await;
+    let rgb: Rgb = Rgb::new([red, green, blue], initial_frame_rate);
 
     let mut saadc_config = saadc::Config::default();
     saadc_config.resolution = saadc::Resolution::_14BIT;
