@@ -79,14 +79,57 @@ impl Ui {
         .await;
         self.state.show();
         loop {
-            let level = self.knob.measure().await;
-            if level != self.state.levels[2] {
-                self.state.levels[2] = level;
+            let parameter = self.read_button_state();
+
+            if parameter != self.current_parameter {
+                self.current_parameter = parameter;
+                rprintln!("Now controlling: {:?}", parameter);
                 self.state.show();
+            }
+
+            let raw_knob_value = self.knob.measure().await;
+            let mapped_value = self.map_knob_value(raw_knob_value, parameter);
+            let mut changed = false;
+
+            match parameter {
+                ControlParameter::FrameRate => {
+                    let new_frame_rate: u64 = mapped_value.into();
+                    if new_frame_rate != self.state.frame_rate {
+                        self.state.frame_rate = new_frame_rate;
+                        changed = true;
+                    }
+                }
+                ControlParameter::Red => {
+                    if mapped_value != self.state.levels[0] {
+                        self.state.levels[0] = mapped_value;
+                        changed = true;
+                    }
+                }
+                ControlParameter::Green => {
+                    if mapped_value != self.state.levels[1] {
+                        self.state.levels[1] = mapped_value;
+                        changed = true;
+                    }
+                }
+                ControlParameter::Blue => {
+                    if mapped_value != self.state.levels[2] {
+                        self.state.levels[2] = mapped_value;
+                        changed = true;
+                    }
+                }
+            }
+
+            if changed {
+                self.state.show();
+
                 set_rgb_levels(|rgb| {
                     *rgb = self.state.levels;
                 })
                 .await;
+
+                if matches!(parameter, ControlParameter::FrameRate) {
+                    rprintln!("Frame rate changed to : {} fps", self.state.frame_rate);
+                }
             }
             Timer::after_millis(50).await;
         }
