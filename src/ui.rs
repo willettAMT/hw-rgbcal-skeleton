@@ -1,5 +1,13 @@
 use crate::*;
 
+#[derive(Debug, Clone, Copy, PartialEq)]
+enum ControlParameter {
+    FrameRate, // No buttons
+    Blue,      // A button
+    Green,     // B button
+    Red,       // A+B buttons
+}
+
 struct UiState {
     levels: [u32; 3],
     frame_rate: u64,
@@ -27,18 +35,39 @@ impl Default for UiState {
 
 pub struct Ui {
     knob: Knob,
-    _button_a: Button,
-    _button_b: Button,
+    button_a: Button,
+    button_b: Button,
     state: UiState,
+    current_parameter: ControlParameter,
 }
 
 impl Ui {
-    pub fn new(knob: Knob, _button_a: Button, _button_b: Button) -> Self {
+    pub fn new(knob: Knob, button_a: Button, button_b: Button) -> Self {
         Self {
             knob,
-            _button_a,
-            _button_b,
+            button_a,
+            button_b,
             state: UiState::default(),
+            current_parameter: ControlParameter::FrameRate,
+        }
+    }
+
+    fn read_button_state(&mut self) -> ControlParameter {
+        let a_pressed = self.button_a.is_low();
+        let b_pressed = self.button_b.is_low();
+
+        match (a_pressed, b_pressed) {
+            (false, false) => ControlParameter::FrameRate, // No buttons
+            (true, false) => ControlParameter::Blue,       // A button
+            (false, true) => ControlParameter::Green,      // B button
+            (true, true) => ControlParameter::Red,         // Both A+B buttons
+        }
+    }
+
+    fn map_knob_value(&self, knob_value: u32, parameter: ControlParameter) -> u32 {
+        match parameter {
+            ControlParameter::FrameRate => 10 + (knob_value * 10),
+            ControlParameter::Blue | ControlParameter::Green | ControlParameter::Red => knob_value,
         }
     }
 
