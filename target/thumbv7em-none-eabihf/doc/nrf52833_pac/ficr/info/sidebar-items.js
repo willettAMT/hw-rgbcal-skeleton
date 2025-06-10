@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"mod":["flash","package","part","ram","variant"],"struct":["INFO"],"type":["FLASH","PACKAGE","PART","RAM","VARIANT"]};

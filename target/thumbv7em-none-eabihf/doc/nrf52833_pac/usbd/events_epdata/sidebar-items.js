@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["EVENTS_EPDATA_A"],"struct":["EVENTS_EPDATA_SPEC","R","W"],"type":["EVENTS_EPDATA_R","EVENTS_EPDATA_W"]};

@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["TASKS_CTSTOP_AW"],"struct":["TASKS_CTSTOP_SPEC","W"],"type":["TASKS_CTSTOP_W"]};

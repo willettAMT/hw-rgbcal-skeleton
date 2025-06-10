@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["TASKS_DISABLE_AW"],"struct":["TASKS_DISABLE_SPEC","W"],"type":["TASKS_DISABLE_W"]};

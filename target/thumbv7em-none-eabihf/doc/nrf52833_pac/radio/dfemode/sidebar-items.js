@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["DFEOPMODE_A"],"struct":["DFEMODE_SPEC","R","W"],"type":["DFEOPMODE_R","DFEOPMODE_W"]};

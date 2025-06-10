@@ -1,0 +1,101 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="USB control pipe trait."><title>ControlPipe in embassy_usb_driver - Rust</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../static.files/rustdoc-46132b98.css"><meta name="rustdoc-vars" data-root-path="../" data-static-root-path="../static.files/" data-current-crate="embassy_usb_driver" data-themes="" data-resource-suffix="" data-rustdoc-version="1.85.1 (4eb161250 2025-03-15)" data-channel="1.85.1" data-search-js="search-75f5ac3e.js" data-settings-js="settings-0f613d39.js" ><script src="../static.files/storage-59e33391.js"></script><script defer src="sidebar-items.js"></script><script defer src="../static.files/main-5f194d8c.js"></script><noscript><link rel="stylesheet" href="../static.files/noscript-893ab5e7.css"></noscript><link rel="alternate icon" type="image/png" href="../static.files/favicon-32x32-6580c154.png"><link rel="icon" type="image/svg+xml" href="../static.files/favicon-044be391.svg"></head><body class="rustdoc trait"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle" title="show sidebar"></button></nav><nav class="sidebar"><div class="sidebar-crate"><h2><a href="../embassy_usb_driver/index.html">embassy_<wbr>usb_<wbr>driver</a><span class="version">0.1.0</span></h2></div><div class="sidebar-elems"><section id="rustdoc-toc"><h2 class="location"><a href="#">Control<wbr>Pipe</a></h2><h3><a href="#required-methods">Required Methods</a></h3><ul class="block"><li><a href="#tymethod.accept" title="accept">accept</a></li><li><a href="#tymethod.accept_set_address" title="accept_set_address">accept_set_address</a></li><li><a href="#tymethod.data_in" title="data_in">data_in</a></li><li><a href="#tymethod.data_out" title="data_out">data_out</a></li><li><a href="#tymethod.max_packet_size" title="max_packet_size">max_packet_size</a></li><li><a href="#tymethod.reject" title="reject">reject</a></li><li><a href="#tymethod.setup" title="setup">setup</a></li></ul><h3><a href="#dyn-compatibility">Dyn Compatibility</a></h3><h3><a href="#implementors">Implementors</a></h3></section><div id="rustdoc-modnav"><h2 class="in-crate"><a href="index.html">In crate embassy_<wbr>usb_<wbr>driver</a></h2></div></div></nav><div class="sidebar-resizer"></div><main><div class="width-limiter"><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><span class="rustdoc-breadcrumbs"><a href="index.html">embassy_usb_driver</a></span><h1>Trait <span class="trait">ControlPipe</span><button id="copy-path" title="Copy item path to clipboard">Copy item path</button></h1><rustdoc-toolbar></rustdoc-toolbar><span class="sub-heading"><a class="src" href="../src/embassy_usb_driver/lib.rs.html#311-344">Source</a> </span></div><pre class="rust item-decl"><code>pub trait ControlPipe {
+    // Required methods
+    fn <a href="#tymethod.max_packet_size" class="fn">max_packet_size</a>(&amp;self) -&gt; <a class="primitive" href="https://doc.rust-lang.org/1.85.1/core/primitive.usize.html">usize</a>;
+<span class="item-spacer"></span>    async fn <a href="#tymethod.setup" class="fn">setup</a>(&amp;mut self) -&gt; [<a class="primitive" href="https://doc.rust-lang.org/1.85.1/core/primitive.u8.html">u8</a>; <a class="primitive" href="https://doc.rust-lang.org/1.85.1/core/primitive.array.html">8</a>];
+<span class="item-spacer"></span>    async fn <a href="#tymethod.data_out" class="fn">data_out</a>(
+        &amp;mut self,
+        buf: &amp;mut [<a class="primitive" href="https://doc.rust-lang.org/1.85.1/core/primitive.u8.html">u8</a>],
+        first: <a class="primitive" href="https://doc.rust-lang.org/1.85.1/core/primitive.bool.html">bool</a>,
+        last: <a class="primitive" href="https://doc.rust-lang.org/1.85.1/core/primitive.bool.html">bool</a>,
+    ) -&gt; <a class="enum" href="https://doc.rust-lang.org/1.85.1/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/1.85.1/core/primitive.usize.html">usize</a>, <a class="enum" href="enum.EndpointError.html" title="enum embassy_usb_driver::EndpointError">EndpointError</a>&gt;;
+<span class="item-spacer"></span>    async fn <a href="#tymethod.data_in" class="fn">data_in</a>(
+        &amp;mut self,
+        data: &amp;[<a class="primitive" href="https://doc.rust-lang.org/1.85.1/core/primitive.u8.html">u8</a>],
+        first: <a class="primitive" href="https://doc.rust-lang.org/1.85.1/core/primitive.bool.html">bool</a>,
+        last: <a class="primitive" href="https://doc.rust-lang.org/1.85.1/core/primitive.bool.html">bool</a>,
+    ) -&gt; <a class="enum" href="https://doc.rust-lang.org/1.85.1/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/1.85.1/core/primitive.unit.html">()</a>, <a class="enum" href="enum.EndpointError.html" title="enum embassy_usb_driver::EndpointError">EndpointError</a>&gt;;
+<span class="item-spacer"></span>    async fn <a href="#tymethod.accept" class="fn">accept</a>(&amp;mut self);
+<span class="item-spacer"></span>    async fn <a href="#tymethod.reject" class="fn">reject</a>(&amp;mut self);
+<span class="item-spacer"></span>    async fn <a href="#tymethod.accept_set_address" class="fn">accept_set_address</a>(&amp;mut self, addr: <a class="primitive" href="https://doc.rust-lang.org/1.85.1/core/primitive.u8.html">u8</a>);
+}</code></pre><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>USB control pipe trait.</p>
+<p>The USB control pipe owns both OUT endpoint 0 and IN endpoint 0 in a single
+unit, and manages them together to implement the control pipe state machine.</p>
+<p>The reason this is a separate trait instead of using EndpointOut/EndpointIn is that
+many USB peripherals treat the control pipe endpoints differently (different registers,
+different procedures), usually to accelerate processing in hardware somehow. A separate
+trait allows the driver to handle it specially.</p>
+<p>The call sequences made by the USB stack to the ControlPipe are the following:</p>
+<ul>
+<li>control in/out with len=0:</li>
+</ul>
+<div class="example-wrap"><pre class="language-not_rust"><code>setup()
+(...processing...)
+accept() or reject()</code></pre></div>
+<ul>
+<li>control out for setting the device address:</li>
+</ul>
+<div class="example-wrap"><pre class="language-not_rust"><code>setup()
+(...processing...)
+accept_set_address(addr) or reject()</code></pre></div>
+<ul>
+<li>control out with len != 0:</li>
+</ul>
+<div class="example-wrap"><pre class="language-not_rust"><code>setup()
+data_out(first=true, last=false)
+data_out(first=false, last=false)
+...
+data_out(first=false, last=false)
+data_out(first=false, last=true)
+(...processing...)
+accept() or reject()</code></pre></div>
+<ul>
+<li>control in with len != 0, accepted:</li>
+</ul>
+<div class="example-wrap"><pre class="language-not_rust"><code>setup()
+(...processing...)
+data_in(first=true, last=false)
+data_in(first=false, last=false)
+...
+data_in(first=false, last=false)
+data_in(first=false, last=true)
+(NO `accept()`!!! This is because calling `data_in` already implies acceptance.)</code></pre></div>
+<ul>
+<li>control in with len != 0, rejected:</li>
+</ul>
+<div class="example-wrap"><pre class="language-not_rust"><code>setup()
+(...processing...)
+reject()</code></pre></div>
+<p>The driver is responsible for handling the status stage. The stack DOES NOT do zero-length
+calls to <code>data_in</code> or <code>data_out</code> for the status zero-length packet. The status stage should
+be triggered by either <code>accept()</code>, or <code>data_in</code> with <code>last = true</code>.</p>
+<p>Note that the host can abandon a control request and send a new SETUP packet any time. If
+a SETUP packet arrives at any time during <code>data_out</code>, <code>data_in</code>, <code>accept</code> or <code>reject</code>,
+the driver must immediately return (with <code>EndpointError::Disabled</code> from <code>data_in</code>, <code>data_out</code>)
+to let the stack call <code>setup()</code> again to start handling the new control request. Not doing
+so will cause things to get stuck, because the host will never read/send the packet we’re
+waiting for.</p>
+</div></details><h2 id="required-methods" class="section-header">Required Methods<a href="#required-methods" class="anchor">§</a></h2><div class="methods"><details class="toggle method-toggle" open><summary><section id="tymethod.max_packet_size" class="method"><a class="src rightside" href="../src/embassy_usb_driver/lib.rs.html#313">Source</a><h4 class="code-header">fn <a href="#tymethod.max_packet_size" class="fn">max_packet_size</a>(&amp;self) -&gt; <a class="primitive" href="https://doc.rust-lang.org/1.85.1/core/primitive.usize.html">usize</a></h4></section></summary><div class="docblock"><p>Maximum packet size for the control pipe</p>
+</div></details><details class="toggle method-toggle" open><summary><section id="tymethod.setup" class="method"><a class="src rightside" href="../src/embassy_usb_driver/lib.rs.html#316">Source</a><h4 class="code-header">async fn <a href="#tymethod.setup" class="fn">setup</a>(&amp;mut self) -&gt; [<a class="primitive" href="https://doc.rust-lang.org/1.85.1/core/primitive.u8.html">u8</a>; <a class="primitive" href="https://doc.rust-lang.org/1.85.1/core/primitive.array.html">8</a>]</h4></section></summary><div class="docblock"><p>Read a single setup packet from the endpoint.</p>
+</div></details><details class="toggle method-toggle" open><summary><section id="tymethod.data_out" class="method"><a class="src rightside" href="../src/embassy_usb_driver/lib.rs.html#322">Source</a><h4 class="code-header">async fn <a href="#tymethod.data_out" class="fn">data_out</a>(
+    &amp;mut self,
+    buf: &amp;mut [<a class="primitive" href="https://doc.rust-lang.org/1.85.1/core/primitive.u8.html">u8</a>],
+    first: <a class="primitive" href="https://doc.rust-lang.org/1.85.1/core/primitive.bool.html">bool</a>,
+    last: <a class="primitive" href="https://doc.rust-lang.org/1.85.1/core/primitive.bool.html">bool</a>,
+) -&gt; <a class="enum" href="https://doc.rust-lang.org/1.85.1/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/1.85.1/core/primitive.usize.html">usize</a>, <a class="enum" href="enum.EndpointError.html" title="enum embassy_usb_driver::EndpointError">EndpointError</a>&gt;</h4></section></summary><div class="docblock"><p>Read a DATA OUT packet into <code>buf</code> in response to a control write request.</p>
+<p>Must be called after <code>setup()</code> for requests with <code>direction</code> of <code>Out</code>
+and <code>length</code> greater than zero.</p>
+</div></details><details class="toggle method-toggle" open><summary><section id="tymethod.data_in" class="method"><a class="src rightside" href="../src/embassy_usb_driver/lib.rs.html#327">Source</a><h4 class="code-header">async fn <a href="#tymethod.data_in" class="fn">data_in</a>(
+    &amp;mut self,
+    data: &amp;[<a class="primitive" href="https://doc.rust-lang.org/1.85.1/core/primitive.u8.html">u8</a>],
+    first: <a class="primitive" href="https://doc.rust-lang.org/1.85.1/core/primitive.bool.html">bool</a>,
+    last: <a class="primitive" href="https://doc.rust-lang.org/1.85.1/core/primitive.bool.html">bool</a>,
+) -&gt; <a class="enum" href="https://doc.rust-lang.org/1.85.1/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/1.85.1/core/primitive.unit.html">()</a>, <a class="enum" href="enum.EndpointError.html" title="enum embassy_usb_driver::EndpointError">EndpointError</a>&gt;</h4></section></summary><div class="docblock"><p>Send a DATA IN packet with <code>data</code> in response to a control read request.</p>
+<p>If <code>last_packet</code> is true, the STATUS packet will be ACKed following the transfer of <code>data</code>.</p>
+</div></details><details class="toggle method-toggle" open><summary><section id="tymethod.accept" class="method"><a class="src rightside" href="../src/embassy_usb_driver/lib.rs.html#332">Source</a><h4 class="code-header">async fn <a href="#tymethod.accept" class="fn">accept</a>(&amp;mut self)</h4></section></summary><div class="docblock"><p>Accept a control request.</p>
+<p>Causes the STATUS packet for the current request to be ACKed.</p>
+</div></details><details class="toggle method-toggle" open><summary><section id="tymethod.reject" class="method"><a class="src rightside" href="../src/embassy_usb_driver/lib.rs.html#337">Source</a><h4 class="code-header">async fn <a href="#tymethod.reject" class="fn">reject</a>(&amp;mut self)</h4></section></summary><div class="docblock"><p>Reject a control request.</p>
+<p>Sets a STALL condition on the pipe to indicate an error.</p>
+</div></details><details class="toggle method-toggle" open><summary><section id="tymethod.accept_set_address" class="method"><a class="src rightside" href="../src/embassy_usb_driver/lib.rs.html#343">Source</a><h4 class="code-header">async fn <a href="#tymethod.accept_set_address" class="fn">accept_set_address</a>(&amp;mut self, addr: <a class="primitive" href="https://doc.rust-lang.org/1.85.1/core/primitive.u8.html">u8</a>)</h4></section></summary><div class="docblock"><p>Accept SET_ADDRESS control and change bus address.</p>
+<p>For most drivers this function should firstly call <code>accept()</code> and then change the bus address.
+However, there are peripherals (Synopsys USB OTG) that have reverse order.</p>
+</div></details></div><h2 id="dyn-compatibility" class="section-header">Dyn Compatibility<a href="#dyn-compatibility" class="anchor">§</a></h2><div class="dyn-compatibility-info"><p>This trait is <b>not</b> <a href="https://doc.rust-lang.org/1.85.1/reference/items/traits.html#object-safety">dyn compatible</a>.</p><p><i>In older versions of Rust, dyn compatibility was called "object safety", so this trait is not object safe.</i></p></div><h2 id="implementors" class="section-header">Implementors<a href="#implementors" class="anchor">§</a></h2><div id="implementors-list"></div><script src="../trait.impl/embassy_usb_driver/trait.ControlPipe.js" async></script></section></div></main></body></html>

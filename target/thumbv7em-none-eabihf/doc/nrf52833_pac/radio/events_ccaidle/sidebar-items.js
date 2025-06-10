@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["EVENTS_CCAIDLE_A"],"struct":["EVENTS_CCAIDLE_SPEC","R","W"],"type":["EVENTS_CCAIDLE_R","EVENTS_CCAIDLE_W"]};

@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["CallbackResult","Error","Gain","Oversample","Reference","Resistor","Resolution","Time"],"struct":["AnyInput","ChannelConfig","Config","InterruptHandler","Saadc","VddInput","VddhDiv5Input"],"trait":["Input"]};

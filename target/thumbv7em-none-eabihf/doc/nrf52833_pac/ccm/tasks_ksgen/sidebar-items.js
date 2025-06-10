@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["TASKS_KSGEN_AW"],"struct":["TASKS_KSGEN_SPEC","W"],"type":["TASKS_KSGEN_W"]};

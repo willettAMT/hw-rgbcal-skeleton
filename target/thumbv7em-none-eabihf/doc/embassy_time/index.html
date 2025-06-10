@@ -1,0 +1,229 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="embassy-time"><title>embassy_time - Rust</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../static.files/rustdoc-46132b98.css"><meta name="rustdoc-vars" data-root-path="../" data-static-root-path="../static.files/" data-current-crate="embassy_time" data-themes="" data-resource-suffix="" data-rustdoc-version="1.85.1 (4eb161250 2025-03-15)" data-channel="1.85.1" data-search-js="search-75f5ac3e.js" data-settings-js="settings-0f613d39.js" ><script src="../static.files/storage-59e33391.js"></script><script defer src="../crates.js"></script><script defer src="../static.files/main-5f194d8c.js"></script><noscript><link rel="stylesheet" href="../static.files/noscript-893ab5e7.css"></noscript><link rel="alternate icon" type="image/png" href="../static.files/favicon-32x32-6580c154.png"><link rel="icon" type="image/svg+xml" href="../static.files/favicon-044be391.svg"></head><body class="rustdoc mod crate"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle" title="show sidebar"></button></nav><nav class="sidebar"><div class="sidebar-crate"><h2><a href="../embassy_time/index.html">embassy_<wbr>time</a><span class="version">0.3.2</span></h2></div><div class="sidebar-elems"><ul class="block"><li><a id="all-types" href="all.html">All Items</a></li></ul><section id="rustdoc-toc"><h3><a href="#">Sections</a></h3><ul class="block top-toc"><li><a href="#embassy-time" title="embassy-time">embassy-time</a><ul><li><a href="#global-time-driver" title="Global time driver">Global time driver</a></li><li><a href="#instants-and-durations" title="Instants and Durations">Instants and Durations</a></li><li><a href="#delays-and-timeouts" title="Delays and timeouts">Delays and timeouts</a></li><li><a href="#wall-clock-time" title="Wall-clock time">Wall-clock time</a></li><li><a href="#feature-flags" title="Feature flags">Feature flags</a></li></ul></li></ul><h3><a href="#structs">Crate Items</a></h3><ul class="block"><li><a href="#structs" title="Structs">Structs</a></li><li><a href="#constants" title="Constants">Constants</a></li><li><a href="#traits" title="Traits">Traits</a></li><li><a href="#functions" title="Functions">Functions</a></li></ul></section><div id="rustdoc-modnav"></div></div></nav><div class="sidebar-resizer"></div><main><div class="width-limiter"><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><h1>Crate <span>embassy_time</span><button id="copy-path" title="Copy item path to clipboard">Copy item path</button></h1><rustdoc-toolbar></rustdoc-toolbar><span class="sub-heading"><a class="src" href="../src/embassy_time/lib.rs.html#1-65">Source</a> </span></div><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><h2 id="embassy-time"><a class="doc-anchor" href="#embassy-time">§</a>embassy-time</h2>
+<p>Timekeeping, delays and timeouts.</p>
+<p>Timekeeping is done with elapsed time since system boot. Time is represented in
+ticks, where the tick rate is defined either by the driver (in the case of a fixed-rate
+tick) or chosen by the user with a <a href="#tick-rate">tick rate</a> feature. The chosen
+tick rate applies to everything in <code>embassy-time</code> and thus determines the maximum
+timing resolution of <code>(1 / tick_rate) seconds</code>.</p>
+<p>Tick counts are 64 bits. The default tick rate of 1Mhz supports
+representing time spans of up to ~584558 years, which is big enough for all practical
+purposes and allows not having to worry about overflows.</p>
+<h3 id="global-time-driver"><a class="doc-anchor" href="#global-time-driver">§</a>Global time driver</h3>
+<p>The <code>time</code> module is backed by a global “time driver” specified at build time.
+Only one driver can be active in a program.</p>
+<p>All methods and structs transparently call into the active driver. This makes it
+possible for libraries to use <code>embassy_time</code> in a driver-agnostic way without
+requiring generic parameters.</p>
+<p>For more details, check the <a href="https://crates.io/crates/embassy-time-driver"><code>embassy_time_driver</code></a> crate.</p>
+<h3 id="instants-and-durations"><a class="doc-anchor" href="#instants-and-durations">§</a>Instants and Durations</h3>
+<p><a href="struct.Instant.html" title="struct embassy_time::Instant"><code>Instant</code></a> represents a given instant of time (relative to system boot), and <a href="struct.Duration.html" title="struct embassy_time::Duration"><code>Duration</code></a>
+represents the duration of a span of time. They implement the math operations you’d expect,
+like addition and substraction.</p>
+<h3 id="delays-and-timeouts"><a class="doc-anchor" href="#delays-and-timeouts">§</a>Delays and timeouts</h3>
+<p><a href="struct.Timer.html" title="struct embassy_time::Timer"><code>Timer</code></a> allows performing async delays. <a href="struct.Ticker.html" title="struct embassy_time::Ticker"><code>Ticker</code></a> allows periodic delays without drifting over time.</p>
+<p>An implementation of the <code>embedded-hal</code> delay traits is provided by <a href="struct.Delay.html" title="struct embassy_time::Delay"><code>Delay</code></a>, for compatibility
+with libraries from the ecosystem.</p>
+<h3 id="wall-clock-time"><a class="doc-anchor" href="#wall-clock-time">§</a>Wall-clock time</h3>
+<p>The <code>time</code> module deals exclusively with a monotonically increasing tick count.
+Therefore it has no direct support for wall-clock time (“real life” datetimes
+like <code>2021-08-24 13:33:21</code>).</p>
+<p>If persistence across reboots is not needed, support can be built on top of
+<code>embassy_time</code> by storing the offset between “seconds elapsed since boot”
+and “seconds since unix epoch”.</p>
+<h3 id="feature-flags"><a class="doc-anchor" href="#feature-flags">§</a>Feature flags</h3>
+<ul>
+<li><span class="stab portability"><code>defmt-timestamp-uptime</code></span> —  Display the time since startup next to defmt log messages.
+At most 1 <code>defmt-timestamp-uptime-*</code> feature can be used.
+<code>defmt-timestamp-uptime</code> is provided for backwards compatibility (provides the same format as <code>uptime-us</code>).
+To use this you must have a time driver provided.</li>
+<li><span class="stab portability"><code>mock-driver</code></span> —  Create a <code>MockDriver</code> that can be manually advanced for testing purposes.</li>
+</ul>
+<h4 id="generic-queue"><a class="doc-anchor" href="#generic-queue">§</a>Generic Queue</h4>
+<ul>
+<li><span class="stab portability"><code>generic-queue</code></span> —  Create a global, generic queue that can be used with any executor.
+To use this you must have a time driver provided.</li>
+</ul>
+<p>The following features set how many timers are used for the generic queue. At most one
+<code>generic-queue-*</code> feature can be enabled. If none is enabled, a default of 64 timers is used.</p>
+<p>When using embassy-time from libraries, you should <em>not</em> enable any <code>generic-queue-*</code> feature, to allow the
+end user to pick.</p>
+<ul>
+<li><span class="stab portability"><code>generic-queue-8</code></span> —  Generic Queue with 8 timers</li>
+<li><span class="stab portability"><code>generic-queue-16</code></span> —  Generic Queue with 16 timers</li>
+<li><span class="stab portability"><code>generic-queue-32</code></span> —  Generic Queue with 32 timers</li>
+<li><span class="stab portability"><code>generic-queue-64</code></span> —  Generic Queue with 64 timers</li>
+<li><span class="stab portability"><code>generic-queue-128</code></span> —  Generic Queue with 128 timers</li>
+</ul>
+<h4 id="tick-rate"><a class="doc-anchor" href="#tick-rate">§</a>Tick Rate</h4>
+<p>At most 1 <code>tick-*</code> feature can be enabled. If none is enabled, a default of 1MHz is used.</p>
+<p>If the time driver in use supports using arbitrary tick rates, you can enable one <code>tick-*</code>
+feature from your binary crate to set the tick rate. The driver will use configured tick rate.
+If the time driver supports a fixed tick rate, it will enable one feature itself, so you should
+not enable one. Check the time driver documentation for details.</p>
+<p>When using embassy-time from libraries, you should <em>not</em> enable any <code>tick-*</code> feature, to allow the
+end user or the driver to pick.</p>
+ <details>
+   <summary>Available tick rates:</summary>
+ <!-- Next line must be left empty for the features to render correctly! -->
+<ul>
+<li><span class="stab portability"><code>tick-hz-1</code></span> —  1Hz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-2</code></span> —  2Hz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-4</code></span> —  4Hz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-8</code></span> —  8Hz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-10</code></span> —  10Hz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-16</code></span> —  16Hz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-32</code></span> —  32Hz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-64</code></span> —  64Hz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-100</code></span> —  100Hz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-128</code></span> —  128Hz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-256</code></span> —  256Hz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-512</code></span> —  512Hz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-1_000</code></span> —  1.0kHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-1_024</code></span> —  1.024kHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-2_000</code></span> —  2.0kHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-2_048</code></span> —  2.048kHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-4_000</code></span> —  4.0kHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-4_096</code></span> —  4.096kHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-8_000</code></span> —  8.0kHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-8_192</code></span> —  8.192kHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-10_000</code></span> —  10.0kHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-16_000</code></span> —  16.0kHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-16_384</code></span> —  16.384kHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-20_000</code></span> —  20.0kHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-32_000</code></span> —  32.0kHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-32_768</code></span> —  32.768kHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-40_000</code></span> —  40.0kHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-64_000</code></span> —  64.0kHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-65_536</code></span> —  65.536kHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-80_000</code></span> —  80.0kHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-100_000</code></span> —  100.0kHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-128_000</code></span> —  128.0kHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-131_072</code></span> —  131.072kHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-160_000</code></span> —  160.0kHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-256_000</code></span> —  256.0kHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-262_144</code></span> —  262.144kHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-320_000</code></span> —  320.0kHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-512_000</code></span> —  512.0kHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-524_288</code></span> —  524.288kHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-640_000</code></span> —  640.0kHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-1_000_000</code></span> —  1.0MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-1_024_000</code></span> —  1.024MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-1_048_576</code></span> —  1.048576MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-1_280_000</code></span> —  1.28MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-2_000_000</code></span> —  2.0MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-2_048_000</code></span> —  2.048MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-2_097_152</code></span> —  2.097152MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-2_560_000</code></span> —  2.56MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-3_000_000</code></span> —  3.0MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-4_000_000</code></span> —  4.0MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-4_096_000</code></span> —  4.096MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-4_194_304</code></span> —  4.194304MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-5_120_000</code></span> —  5.12MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-6_000_000</code></span> —  6.0MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-8_000_000</code></span> —  8.0MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-8_192_000</code></span> —  8.192MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-8_388_608</code></span> —  8.388608MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-9_000_000</code></span> —  9.0MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-10_000_000</code></span> —  10.0MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-10_240_000</code></span> —  10.24MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-12_000_000</code></span> —  12.0MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-16_000_000</code></span> —  16.0MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-16_384_000</code></span> —  16.384MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-16_777_216</code></span> —  16.777216MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-18_000_000</code></span> —  18.0MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-20_000_000</code></span> —  20.0MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-20_480_000</code></span> —  20.48MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-24_000_000</code></span> —  24.0MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-30_000_000</code></span> —  30.0MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-32_000_000</code></span> —  32.0MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-32_768_000</code></span> —  32.768MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-36_000_000</code></span> —  36.0MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-40_000_000</code></span> —  40.0MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-40_960_000</code></span> —  40.96MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-48_000_000</code></span> —  48.0MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-50_000_000</code></span> —  50.0MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-60_000_000</code></span> —  60.0MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-64_000_000</code></span> —  64.0MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-65_536_000</code></span> —  65.536MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-70_000_000</code></span> —  70.0MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-72_000_000</code></span> —  72.0MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-80_000_000</code></span> —  80.0MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-81_920_000</code></span> —  81.92MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-90_000_000</code></span> —  90.0MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-96_000_000</code></span> —  96.0MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-100_000_000</code></span> —  100.0MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-110_000_000</code></span> —  110.0MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-120_000_000</code></span> —  120.0MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-128_000_000</code></span> —  128.0MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-130_000_000</code></span> —  130.0MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-131_072_000</code></span> —  131.072MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-140_000_000</code></span> —  140.0MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-144_000_000</code></span> —  144.0MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-150_000_000</code></span> —  150.0MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-160_000_000</code></span> —  160.0MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-163_840_000</code></span> —  163.84MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-170_000_000</code></span> —  170.0MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-180_000_000</code></span> —  180.0MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-190_000_000</code></span> —  190.0MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-192_000_000</code></span> —  192.0MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-200_000_000</code></span> —  200.0MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-210_000_000</code></span> —  210.0MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-220_000_000</code></span> —  220.0MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-230_000_000</code></span> —  230.0MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-240_000_000</code></span> —  240.0MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-250_000_000</code></span> —  250.0MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-256_000_000</code></span> —  256.0MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-260_000_000</code></span> —  260.0MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-262_144_000</code></span> —  262.144MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-270_000_000</code></span> —  270.0MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-280_000_000</code></span> —  280.0MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-288_000_000</code></span> —  288.0MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-290_000_000</code></span> —  290.0MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-300_000_000</code></span> —  300.0MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-320_000_000</code></span> —  320.0MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-327_680_000</code></span> —  327.68MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-340_000_000</code></span> —  340.0MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-360_000_000</code></span> —  360.0MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-380_000_000</code></span> —  380.0MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-384_000_000</code></span> —  384.0MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-400_000_000</code></span> —  400.0MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-420_000_000</code></span> —  420.0MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-440_000_000</code></span> —  440.0MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-460_000_000</code></span> —  460.0MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-480_000_000</code></span> —  480.0MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-500_000_000</code></span> —  500.0MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-512_000_000</code></span> —  512.0MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-520_000_000</code></span> —  520.0MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-524_288_000</code></span> —  524.288MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-540_000_000</code></span> —  540.0MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-560_000_000</code></span> —  560.0MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-576_000_000</code></span> —  576.0MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-580_000_000</code></span> —  580.0MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-600_000_000</code></span> —  600.0MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-620_000_000</code></span> —  620.0MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-640_000_000</code></span> —  640.0MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-655_360_000</code></span> —  655.36MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-660_000_000</code></span> —  660.0MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-680_000_000</code></span> —  680.0MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-700_000_000</code></span> —  700.0MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-720_000_000</code></span> —  720.0MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-740_000_000</code></span> —  740.0MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-760_000_000</code></span> —  760.0MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-768_000_000</code></span> —  768.0MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-780_000_000</code></span> —  780.0MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-800_000_000</code></span> —  800.0MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-820_000_000</code></span> —  820.0MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-840_000_000</code></span> —  840.0MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-860_000_000</code></span> —  860.0MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-880_000_000</code></span> —  880.0MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-900_000_000</code></span> —  900.0MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-920_000_000</code></span> —  920.0MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-940_000_000</code></span> —  940.0MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-960_000_000</code></span> —  960.0MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-980_000_000</code></span> —  980.0MHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-1_000_000_000</code></span> —  1.0GHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-1_310_720_000</code></span> —  1.31072GHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-2_621_440_000</code></span> —  2.62144GHz Tick Rate</li>
+<li><span class="stab portability"><code>tick-hz-5_242_880_000</code></span> —  5.24288GHz Tick Rate</li>
+</ul>
+ </details></div></details><h2 id="structs" class="section-header">Structs<a href="#structs" class="anchor">§</a></h2><ul class="item-table"><li><div class="item-name"><a class="struct" href="struct.Delay.html" title="struct embassy_time::Delay">Delay</a></div><div class="desc docblock-short">Type implementing async delays and blocking <code>embedded-hal</code> delays.</div></li><li><div class="item-name"><a class="struct" href="struct.Duration.html" title="struct embassy_time::Duration">Duration</a></div><div class="desc docblock-short">Represents the difference between two <a href="struct.Instant.html">Instant</a>s</div></li><li><div class="item-name"><a class="struct" href="struct.Instant.html" title="struct embassy_time::Instant">Instant</a></div><div class="desc docblock-short">An Instant in time, based on the MCU’s clock ticks since startup.</div></li><li><div class="item-name"><a class="struct" href="struct.Ticker.html" title="struct embassy_time::Ticker">Ticker</a></div><div class="desc docblock-short">Asynchronous stream that yields every Duration, indefinitely.</div></li><li><div class="item-name"><a class="struct" href="struct.TimeoutError.html" title="struct embassy_time::TimeoutError">Timeout<wbr>Error</a></div><div class="desc docblock-short">Error returned by <a href="fn.with_timeout.html" title="fn embassy_time::with_timeout"><code>with_timeout</code></a> and <a href="fn.with_deadline.html" title="fn embassy_time::with_deadline"><code>with_deadline</code></a> on timeout.</div></li><li><div class="item-name"><a class="struct" href="struct.Timer.html" title="struct embassy_time::Timer">Timer</a></div><div class="desc docblock-short">A future that completes at a specified <a href="struct.Instant.html">Instant</a>.</div></li></ul><h2 id="constants" class="section-header">Constants<a href="#constants" class="anchor">§</a></h2><ul class="item-table"><li><div class="item-name"><a class="constant" href="constant.TICK_HZ.html" title="constant embassy_time::TICK_HZ">TICK_HZ</a></div><div class="desc docblock-short">Ticks per second of the global timebase.</div></li></ul><h2 id="traits" class="section-header">Traits<a href="#traits" class="anchor">§</a></h2><ul class="item-table"><li><div class="item-name"><a class="trait" href="trait.WithTimeout.html" title="trait embassy_time::WithTimeout">With<wbr>Timeout</a></div><div class="desc docblock-short">Provides functions to run a given future with a timeout or a deadline.</div></li></ul><h2 id="functions" class="section-header">Functions<a href="#functions" class="anchor">§</a></h2><ul class="item-table"><li><div class="item-name"><a class="fn" href="fn.block_for.html" title="fn embassy_time::block_for">block_<wbr>for</a></div><div class="desc docblock-short">Blocks for at least <code>duration</code>.</div></li><li><div class="item-name"><a class="fn" href="fn.with_deadline.html" title="fn embassy_time::with_deadline">with_<wbr>deadline</a></div><div class="desc docblock-short">Runs a given future with a deadline time.</div></li><li><div class="item-name"><a class="fn" href="fn.with_timeout.html" title="fn embassy_time::with_timeout">with_<wbr>timeout</a></div><div class="desc docblock-short">Runs a given future with a timeout.</div></li></ul></section></div></main></body></html>

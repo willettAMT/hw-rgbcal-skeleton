@@ -1,0 +1,1 @@
+searchState.loadedDescShard("panic_rtt_target", 0, "Logs panic messages over RTT. A companion crate for …")

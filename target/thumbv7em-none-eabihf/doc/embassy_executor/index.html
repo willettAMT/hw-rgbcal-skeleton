@@ -1,0 +1,95 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="embassy-executor"><title>embassy_executor - Rust</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../static.files/rustdoc-46132b98.css"><meta name="rustdoc-vars" data-root-path="../" data-static-root-path="../static.files/" data-current-crate="embassy_executor" data-themes="" data-resource-suffix="" data-rustdoc-version="1.85.1 (4eb161250 2025-03-15)" data-channel="1.85.1" data-search-js="search-75f5ac3e.js" data-settings-js="settings-0f613d39.js" ><script src="../static.files/storage-59e33391.js"></script><script defer src="../crates.js"></script><script defer src="../static.files/main-5f194d8c.js"></script><noscript><link rel="stylesheet" href="../static.files/noscript-893ab5e7.css"></noscript><link rel="alternate icon" type="image/png" href="../static.files/favicon-32x32-6580c154.png"><link rel="icon" type="image/svg+xml" href="../static.files/favicon-044be391.svg"></head><body class="rustdoc mod crate"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle" title="show sidebar"></button></nav><nav class="sidebar"><div class="sidebar-crate"><h2><a href="../embassy_executor/index.html">embassy_<wbr>executor</a><span class="version">0.5.1</span></h2></div><div class="sidebar-elems"><ul class="block"><li><a id="all-types" href="all.html">All Items</a></li></ul><section id="rustdoc-toc"><h3><a href="#">Sections</a></h3><ul class="block top-toc"><li><a href="#embassy-executor" title="embassy-executor">embassy-executor</a><ul><li><a href="#task-arena" title="Task arena">Task arena</a></li><li><a href="#statically-allocating-tasks" title="Statically allocating tasks">Statically allocating tasks</a></li><li><a href="#feature-flags" title="Feature flags">Feature flags</a></li></ul></li></ul><h3><a href="#modules">Crate Items</a></h3><ul class="block"><li><a href="#modules" title="Modules">Modules</a></li><li><a href="#structs" title="Structs">Structs</a></li><li><a href="#enums" title="Enums">Enums</a></li><li><a href="#attributes" title="Attribute Macros">Attribute Macros</a></li></ul></section><div id="rustdoc-modnav"></div></div></nav><div class="sidebar-resizer"></div><main><div class="width-limiter"><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><h1>Crate <span>embassy_executor</span><button id="copy-path" title="Copy item path to clipboard">Copy item path</button></h1><rustdoc-toolbar></rustdoc-toolbar><span class="sub-heading"><a class="src" href="../src/embassy_executor/lib.rs.html#1-141">Source</a> </span></div><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><h2 id="embassy-executor"><a class="doc-anchor" href="#embassy-executor">§</a>embassy-executor</h2>
+<p>An async/await executor designed for embedded usage.</p>
+<ul>
+<li>No <code>alloc</code>, no heap needed.</li>
+<li>With nightly Rust, task futures can be fully statically allocated.</li>
+<li>No “fixed capacity” data structures, executor works with 1 or 1000 tasks without needing config/tuning.</li>
+<li>Integrated timer queue: sleeping is easy, just do <code>Timer::after_secs(1).await;</code>.</li>
+<li>No busy-loop polling: CPU sleeps when there’s no work to do, using interrupts or <code>WFE/SEV</code>.</li>
+<li>Efficient polling: a wake will only poll the woken task, not all of them.</li>
+<li>Fair: a task can’t monopolize CPU time even if it’s constantly being woken. All other tasks get a chance to run before a given task gets polled for the second time.</li>
+<li>Creating multiple executor instances is supported, to run tasks with multiple priority levels. This allows higher-priority tasks to preempt lower-priority tasks.</li>
+</ul>
+<h3 id="task-arena"><a class="doc-anchor" href="#task-arena">§</a>Task arena</h3>
+<p>When the <code>nightly</code> Cargo feature is not enabled, <code>embassy-executor</code> allocates tasks out of an arena (a very simple bump allocator).</p>
+<p>If the task arena gets full, the program will panic at runtime. To guarantee this doesn’t happen, you must set the size to the sum of sizes of all tasks.</p>
+<p>Tasks are allocated from the arena when spawned for the first time. If the task exists, the allocation is not released to the arena, but can be reused to spawn the task again. For multiple-instance tasks (like <code>#[embassy_executor::task(pool_size = 4)]</code>), the first spawn will allocate memory for all instances. This is done for performance and to increase predictability (for example, spawning at least 1 instance of every task at boot guarantees an immediate panic if the arena is too small, while allocating instances on-demand could delay the panic to only when the program is under load).</p>
+<p>The arena size can be configured in two ways:</p>
+<ul>
+<li>Via Cargo features: enable a Cargo feature like <code>task-arena-size-8192</code>. Only a selection of values
+is available, see <a href="#task-arena-size">Task Area Sizes</a> for reference.</li>
+<li>Via environment variables at build time: set the variable named <code>EMBASSY_EXECUTOR_TASK_ARENA_SIZE</code>. For example
+<code>EMBASSY_EXECUTOR_TASK_ARENA_SIZE=4321 cargo build</code>. You can also set them in the <code>[env]</code> section of <code>.cargo/config.toml</code>.
+Any value can be set, unlike with Cargo features.</li>
+</ul>
+<p>Environment variables take precedence over Cargo features. If two Cargo features are enabled for the same setting
+with different values, compilation fails.</p>
+<h3 id="statically-allocating-tasks"><a class="doc-anchor" href="#statically-allocating-tasks">§</a>Statically allocating tasks</h3>
+<p>When using nightly Rust, enable the <code>nightly</code> Cargo feature. This will make <code>embassy-executor</code> use the <code>type_alias_impl_trait</code> feature to allocate all tasks in <code>static</code>s. Each task gets its own <code>static</code>, with the exact size to hold the task (or multiple instances of it, if using <code>pool_size</code>) calculated automatically at compile time. If tasks don’t fit in RAM, this is detected at compile time by the linker. Runtime panics due to running out of memory are not possible.</p>
+<p>The configured arena size is ignored, no arena is used at all.</p>
+<h3 id="feature-flags"><a class="doc-anchor" href="#feature-flags">§</a>Feature flags</h3>
+<ul>
+<li><span class="stab portability"><code>nightly</code></span> —  Enable nightly-only features</li>
+<li><span class="stab portability"><code>integrated-timers</code></span> —  Use the executor-integrated <code>embassy-time</code> timer queue.</li>
+</ul>
+<h4 id="architecture"><a class="doc-anchor" href="#architecture">§</a>Architecture</h4>
+<ul>
+<li><span class="stab portability"><code>arch-std</code></span> —  std</li>
+<li><span class="stab portability"><code>arch-cortex-m</code></span> —  Cortex-M</li>
+<li><span class="stab portability"><code>arch-riscv32</code></span> —  RISC-V 32</li>
+<li><span class="stab portability"><code>arch-wasm</code></span> —  WASM</li>
+</ul>
+<h4 id="executor"><a class="doc-anchor" href="#executor">§</a>Executor</h4>
+<ul>
+<li><span class="stab portability"><code>executor-thread</code></span> —  Enable the thread-mode executor (using WFE/SEV in Cortex-M, WFI in other embedded archs)</li>
+<li><span class="stab portability"><code>executor-interrupt</code></span> —  Enable the interrupt-mode executor (available in Cortex-M only)</li>
+</ul>
+<h4 id="task-arena-size"><a class="doc-anchor" href="#task-arena-size">§</a>Task Arena Size</h4>
+<p>Sets the <a href="#task-arena">task arena</a> size. Necessary if you’re not using <code>nightly</code>.</p>
+ <details>
+  <summary>Preconfigured Task Arena Sizes:</summary>
+ <!-- rustdoc requires the following blank line for the feature list to render correctly! -->
+<ul>
+<li><span class="stab portability"><code>task-arena-size-64</code></span> —  64</li>
+<li><span class="stab portability"><code>task-arena-size-128</code></span> —  128</li>
+<li><span class="stab portability"><code>task-arena-size-192</code></span> —  192</li>
+<li><span class="stab portability"><code>task-arena-size-256</code></span> —  256</li>
+<li><span class="stab portability"><code>task-arena-size-320</code></span> —  320</li>
+<li><span class="stab portability"><code>task-arena-size-384</code></span> —  384</li>
+<li><span class="stab portability"><code>task-arena-size-512</code></span> —  512</li>
+<li><span class="stab portability"><code>task-arena-size-640</code></span> —  640</li>
+<li><span class="stab portability"><code>task-arena-size-768</code></span> —  768</li>
+<li><span class="stab portability"><code>task-arena-size-1024</code></span> —  1024</li>
+<li><span class="stab portability"><code>task-arena-size-1280</code></span> —  1280</li>
+<li><span class="stab portability"><code>task-arena-size-1536</code></span> —  1536</li>
+<li><span class="stab portability"><code>task-arena-size-2048</code></span> —  2048</li>
+<li><span class="stab portability"><code>task-arena-size-2560</code></span> —  2560</li>
+<li><span class="stab portability"><code>task-arena-size-3072</code></span> —  3072</li>
+<li><span class="stab portability"><code>task-arena-size-4096</code></span> —  4096 (default)</li>
+<li><span class="stab portability"><code>task-arena-size-5120</code></span> —  5120</li>
+<li><span class="stab portability"><code>task-arena-size-6144</code></span> —  6144</li>
+<li><span class="stab portability"><code>task-arena-size-8192</code></span> —  8192</li>
+<li><span class="stab portability"><code>task-arena-size-10240</code></span> —  10240</li>
+<li><span class="stab portability"><code>task-arena-size-12288</code></span> —  12288</li>
+<li><span class="stab portability"><code>task-arena-size-16384</code></span> —  16384</li>
+<li><span class="stab portability"><code>task-arena-size-20480</code></span> —  20480</li>
+<li><span class="stab portability"><code>task-arena-size-24576</code></span> —  24576</li>
+<li><span class="stab portability"><code>task-arena-size-32768</code></span> —  32768</li>
+<li><span class="stab portability"><code>task-arena-size-40960</code></span> —  40960</li>
+<li><span class="stab portability"><code>task-arena-size-49152</code></span> —  49152</li>
+<li><span class="stab portability"><code>task-arena-size-65536</code></span> —  65536</li>
+<li><span class="stab portability"><code>task-arena-size-81920</code></span> —  81920</li>
+<li><span class="stab portability"><code>task-arena-size-98304</code></span> —  98304</li>
+<li><span class="stab portability"><code>task-arena-size-131072</code></span> —  131072</li>
+<li><span class="stab portability"><code>task-arena-size-163840</code></span> —  163840</li>
+<li><span class="stab portability"><code>task-arena-size-196608</code></span> —  196608</li>
+<li><span class="stab portability"><code>task-arena-size-262144</code></span> —  262144</li>
+<li><span class="stab portability"><code>task-arena-size-327680</code></span> —  327680</li>
+<li><span class="stab portability"><code>task-arena-size-393216</code></span> —  393216</li>
+<li><span class="stab portability"><code>task-arena-size-524288</code></span> —  524288</li>
+<li><span class="stab portability"><code>task-arena-size-655360</code></span> —  655360</li>
+<li><span class="stab portability"><code>task-arena-size-786432</code></span> —  786432</li>
+<li><span class="stab portability"><code>task-arena-size-1048576</code></span> —  1048576</li>
+</ul>
+ </details></div></details><h2 id="modules" class="section-header">Modules<a href="#modules" class="anchor">§</a></h2><ul class="item-table"><li><div class="item-name"><a class="mod" href="raw/index.html" title="mod embassy_executor::raw">raw</a></div><div class="desc docblock-short">Raw executor.</div></li></ul><h2 id="structs" class="section-header">Structs<a href="#structs" class="anchor">§</a></h2><ul class="item-table"><li><div class="item-name"><a class="struct" href="struct.Executor.html" title="struct embassy_executor::Executor">Executor</a></div><div class="desc docblock-short">Thread mode executor, using WFE/SEV.</div></li><li><div class="item-name"><a class="struct" href="struct.SendSpawner.html" title="struct embassy_executor::SendSpawner">Send<wbr>Spawner</a></div><div class="desc docblock-short">Handle to spawn tasks into an executor from any thread.</div></li><li><div class="item-name"><a class="struct" href="struct.SpawnToken.html" title="struct embassy_executor::SpawnToken">Spawn<wbr>Token</a></div><div class="desc docblock-short">Token to spawn a newly-created task in an executor.</div></li><li><div class="item-name"><a class="struct" href="struct.Spawner.html" title="struct embassy_executor::Spawner">Spawner</a></div><div class="desc docblock-short">Handle to spawn tasks into an executor.</div></li></ul><h2 id="enums" class="section-header">Enums<a href="#enums" class="anchor">§</a></h2><ul class="item-table"><li><div class="item-name"><a class="enum" href="enum.SpawnError.html" title="enum embassy_executor::SpawnError">Spawn<wbr>Error</a></div><div class="desc docblock-short">Error returned when spawning a task.</div></li></ul><h2 id="attributes" class="section-header">Attribute Macros<a href="#attributes" class="anchor">§</a></h2><ul class="item-table"><li><div class="item-name"><a class="attr" href="attr.main.html" title="attr embassy_executor::main">main</a></div><div class="desc docblock-short">Creates a new <code>executor</code> instance and declares an application entry point for Cortex-M spawning the corresponding function body as an async task.</div></li><li><div class="item-name"><a class="attr" href="attr.task.html" title="attr embassy_executor::task">task</a></div><div class="desc docblock-short">Declares an async task that can be run by <code>embassy-executor</code>. The optional <code>pool_size</code> parameter can be used to specify how
+many concurrent tasks can be spawned (default is 1) for the function.</div></li></ul></section></div></main></body></html>

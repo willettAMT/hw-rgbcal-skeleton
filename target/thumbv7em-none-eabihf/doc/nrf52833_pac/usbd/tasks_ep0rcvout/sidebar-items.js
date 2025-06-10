@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["TASKS_EP0RCVOUT_AW"],"struct":["TASKS_EP0RCVOUT_SPEC","W"],"type":["TASKS_EP0RCVOUT_W"]};

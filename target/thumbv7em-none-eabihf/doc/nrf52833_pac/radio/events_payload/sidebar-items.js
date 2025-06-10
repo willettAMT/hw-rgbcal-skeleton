@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["EVENTS_PAYLOAD_A"],"struct":["EVENTS_PAYLOAD_SPEC","R","W"],"type":["EVENTS_PAYLOAD_R","EVENTS_PAYLOAD_W"]};

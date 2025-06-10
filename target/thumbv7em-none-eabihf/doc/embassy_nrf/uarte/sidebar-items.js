@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["Baudrate","Error","Parity"],"struct":["Config","InterruptHandler","Uarte","UarteRx","UarteRxWithIdle","UarteTx"],"trait":["Instance"]};

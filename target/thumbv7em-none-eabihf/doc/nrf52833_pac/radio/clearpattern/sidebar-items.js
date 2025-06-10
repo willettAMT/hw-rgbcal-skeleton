@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["CLEARPATTERN_A"],"struct":["CLEARPATTERN_SPEC","R","W"],"type":["CLEARPATTERN_R","CLEARPATTERN_W"]};

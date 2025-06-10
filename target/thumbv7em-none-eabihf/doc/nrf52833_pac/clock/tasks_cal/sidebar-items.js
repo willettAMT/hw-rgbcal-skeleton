@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["TASKS_CAL_AW"],"struct":["TASKS_CAL_SPEC","W"],"type":["TASKS_CAL_W"]};

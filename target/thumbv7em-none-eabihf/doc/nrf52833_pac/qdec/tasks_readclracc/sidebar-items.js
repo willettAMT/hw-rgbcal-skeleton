@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["TASKS_READCLRACC_AW"],"struct":["TASKS_READCLRACC_SPEC","W"],"type":["TASKS_READCLRACC_W"]};

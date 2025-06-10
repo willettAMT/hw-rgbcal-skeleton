@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"mod":["dfegpio"],"struct":["PSEL"],"type":["DFEGPIO"]};

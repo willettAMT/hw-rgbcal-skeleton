@@ -1,5 +1,6 @@
 use crate::*;
 
+/// Represents which parameter the knob is currently controlling
 #[derive(Debug, Clone, Copy, PartialEq)]
 enum ControlParameter {
     FrameRate, // No buttons
@@ -8,12 +9,63 @@ enum ControlParameter {
     Red,       // A+B buttons
 }
 
+/// Internal state for th e UI control system.
+///
+/// This struct maintains the current values for all controallbe parameters.
+/// It serves as a local cache to minimize shared state access and provides
+/// the source of truth for UI display.
+///
+/// # Fields
+///
+/// -'levels': RGB intensity values [red, green, blue] ranging from 0-15
+/// -'frame_rate': Display refresh rate in FPS, ranging from 10-160
+///
+/// # Examples
+///
+/// ```rust,no_run
+/// let state = UiState {
+///     levels: [10, 8, 12],    // Red=10, Green=8, Blue=12
+///     frame_rate: 60,         // 60 FPS
+/// };
+/// ```
 struct UiState {
+    /// RGB intensity levels [red, green, blue] with values from 0-15.
+    ///
+    /// Each element corresponds to the intensity of the repsective color channel:
+    /// - Index 0: Red intensity (0 = off, 15 = maximum)
+    /// - Index 1: Green intensity (0 = off, 15 = maximum)
+    /// - Index 2: Blue intensity (0 = off, 15 = maximum)
     levels: [u32; 3],
+    /// Display refresh rate in frames per second 910-160 FPS).
+    ///
+    /// Controls how freqwuently the RGB LEDs are update. Higher values
+    /// provide smoother visual transitions but increase power consumption.
     frame_rate: u64,
 }
 
 impl UiState {
+    /// Displays the current UI state to the debug console.
+    ///
+    /// Outputs a formatted display of all current parameter values including
+    /// RGB levels and frame rate. This provides real-time feedback about
+    /// the system state for debugging and user confirmation.
+    ///
+    /// # Output Format
+    ///
+    /// ```text
+    /// === RGB Calibration ===
+    /// red: 10
+    /// green: 8  
+    /// blue: 12
+    /// frame rate: 60
+    /// ```
+    ///
+    /// # Examples
+    ///
+    /// ```rust,no_run
+    /// let state = UiState { levels: [10, 8, 12], frame_rate: 60 };
+    /// state.show(); // Prints current values to console
+    /// ```
     fn show(&self) {
         let names = ["red", "green", "blue"];
         rprintln!();
@@ -51,7 +103,7 @@ impl Ui {
             current_parameter: ControlParameter::FrameRate,
         }
     }
-
+    /// Read the current button state and determine which parameter to control
     fn read_button_state(&mut self) -> ControlParameter {
         let a_pressed = self.button_a.is_low();
         let b_pressed = self.button_b.is_low();
@@ -63,14 +115,49 @@ impl Ui {
             (true, true) => ControlParameter::Red,         // Both A+B buttons
         }
     }
-
+    /// Map knob value (0-15) to appropriate parameter value
     fn map_knob_value(&self, knob_value: u32, parameter: ControlParameter) -> u32 {
         match parameter {
             ControlParameter::FrameRate => 10 + (knob_value * 10),
             ControlParameter::Blue | ControlParameter::Green | ControlParameter::Red => knob_value,
         }
     }
-
+    /// Main UI control loop that handles input processing and state management.
+    ///
+    /// This is the primary entry point for the UI system. It runs continuously,
+    /// processing button and knob inputs, managing parameter selection, and
+    /// synchronizing state with the RGB display system.
+    ///
+    /// # Operation Flow
+    ///
+    /// 1. **Parameter Detection**: Check button state to determine active parameter
+    /// 2. **Value Mapping**: Read knob input and map to appropriate value range
+    /// 3. **Change Detection**: Only update state when values actually change
+    /// 4. **State Synchronization**: Update shared state for RGB display system
+    /// 5. **User Feedback**: Display current values and active parameter
+    ///
+    /// # Value Ranges
+    ///
+    /// - **RGB Parameters**: 0-15 (mapped from knob input)
+    /// - **Frame Rate**: 10-160 FPS (mapped from knob input)
+    ///
+    /// # Performance Considerations
+    ///
+    /// - Uses change detection to minimize shared state updates
+    /// - Local state caching reduces lock contention
+    /// - 50ms loop delay balances responsiveness with CPU usage
+    ///
+    /// # Examples
+    ///
+    /// ```rust,no_run
+    /// let mut ui = Ui::new(knob, btn_a, btn_b);
+    /// ui.run().await; // Starts the UI control loop (never returns)
+    /// ```
+    ///
+    /// # Panics
+    ///
+    /// This function never returns under normal operation. It will only
+    /// exit if the hardware fails or the system panics.
     pub async fn run(&mut self) -> ! {
         self.state.levels[2] = self.knob.measure().await;
         set_rgb_levels(|rgb| {

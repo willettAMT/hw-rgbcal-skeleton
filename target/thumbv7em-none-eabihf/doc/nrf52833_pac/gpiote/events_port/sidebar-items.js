@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["EVENTS_PORT_A"],"struct":["EVENTS_PORT_SPEC","R","W"],"type":["EVENTS_PORT_R","EVENTS_PORT_W"]};

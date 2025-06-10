@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["EVENTS_ENDEPIN_A"],"struct":["EVENTS_ENDEPIN_SPEC","R","W"],"type":["EVENTS_ENDEPIN_R","EVENTS_ENDEPIN_W"]};

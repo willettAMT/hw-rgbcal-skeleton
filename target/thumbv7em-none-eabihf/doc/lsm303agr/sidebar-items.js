@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["AccelMode","AccelOutputDataRate","AccelScale","Error","FifoMode","Interrupt","MagMode","MagOutputDataRate"],"mod":["interface","mode"],"struct":["Acceleration","AccelerometerId","Lsm303agr","MagneticField","MagnetometerId","ModeChangeError","Status","Temperature","TemperatureStatus"]};

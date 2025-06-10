@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["In","Out"],"mod":["vbus_detect"],"struct":["Bus","ControlPipe","Driver","Endpoint","InterruptHandler"],"trait":["Instance"]};

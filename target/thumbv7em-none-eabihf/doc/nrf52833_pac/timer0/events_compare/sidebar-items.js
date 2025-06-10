@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["EVENTS_COMPARE_A"],"struct":["EVENTS_COMPARE_SPEC","R","W"],"type":["EVENTS_COMPARE_R","EVENTS_COMPARE_W"]};

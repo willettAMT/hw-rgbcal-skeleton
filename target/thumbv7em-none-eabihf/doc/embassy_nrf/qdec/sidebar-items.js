@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["LedPolarity","NumSamples","SamplePeriod"],"struct":["Config","InterruptHandler","Qdec"],"trait":["Instance"]};

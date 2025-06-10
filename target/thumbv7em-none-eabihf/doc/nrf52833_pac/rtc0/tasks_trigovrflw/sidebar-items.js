@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["TASKS_TRIGOVRFLW_AW"],"struct":["TASKS_TRIGOVRFLW_SPEC","W"],"type":["TASKS_TRIGOVRFLW_W"]};

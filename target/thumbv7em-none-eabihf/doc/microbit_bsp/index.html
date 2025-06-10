@@ -1,0 +1,60 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="microbit-bsp"><title>microbit_bsp - Rust</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../static.files/rustdoc-46132b98.css"><meta name="rustdoc-vars" data-root-path="../" data-static-root-path="../static.files/" data-current-crate="microbit_bsp" data-themes="" data-resource-suffix="" data-rustdoc-version="1.85.1 (4eb161250 2025-03-15)" data-channel="1.85.1" data-search-js="search-75f5ac3e.js" data-settings-js="settings-0f613d39.js" ><script src="../static.files/storage-59e33391.js"></script><script defer src="../crates.js"></script><script defer src="../static.files/main-5f194d8c.js"></script><noscript><link rel="stylesheet" href="../static.files/noscript-893ab5e7.css"></noscript><link rel="alternate icon" type="image/png" href="../static.files/favicon-32x32-6580c154.png"><link rel="icon" type="image/svg+xml" href="../static.files/favicon-044be391.svg"></head><body class="rustdoc mod crate"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle" title="show sidebar"></button></nav><nav class="sidebar"><div class="sidebar-crate"><h2><a href="../microbit_bsp/index.html">microbit_<wbr>bsp</a><span class="version">0.3.1</span></h2></div><div class="sidebar-elems"><ul class="block"><li><a id="all-types" href="all.html">All Items</a></li></ul><section id="rustdoc-toc"><h3><a href="#">Sections</a></h3><ul class="block top-toc"><li><a href="#microbit-bsp" title="microbit-bsp">microbit-bsp</a><ul><li><a href="#features" title="Features">Features</a></li><li><a href="#example-application" title="Example application">Example application</a></li><li><a href="#examples" title="Examples">Examples</a></li><li><a href="#cargo-features" title="Cargo Features">Cargo Features</a></li></ul></li></ul><h3><a href="#reexports">Crate Items</a></h3><ul class="block"><li><a href="#reexports" title="Re-exports">Re-exports</a></li><li><a href="#modules" title="Modules">Modules</a></li><li><a href="#structs" title="Structs">Structs</a></li><li><a href="#enums" title="Enums">Enums</a></li><li><a href="#types" title="Type Aliases">Type Aliases</a></li></ul></section><div id="rustdoc-modnav"></div></div></nav><div class="sidebar-resizer"></div><main><div class="width-limiter"><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><h1>Crate <span>microbit_bsp</span><button id="copy-path" title="Copy item path to clipboard">Copy item path</button></h1><rustdoc-toolbar></rustdoc-toolbar><span class="sub-heading"><a class="src" href="../src/microbit_bsp/lib.rs.html#1-16">Source</a> </span></div><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><h2 id="microbit-bsp"><a class="doc-anchor" href="#microbit-bsp">§</a>microbit-bsp</h2>
+<p><a href="https://github.com/lulf/microbit-bsp/actions/workflows/ci.yaml"><img src="https://github.com/lulf/microbit-bsp/actions/workflows/ci.yaml/badge.svg" alt="CI" /></a>
+<a href="https://crates.io/crates/microbit-bsp"><img src="https://img.shields.io/crates/v/microbit-bsp.svg" alt="crates.io" /></a>
+<a href="https://docs.rs/microbit-bsp"><img src="https://docs.rs/microbit-bsp/badge.svg" alt="docs.rs" /></a></p>
+<p>microbit-bsp is a board support package (BSP) library for the BBC micro:bit v2 and newer.</p>
+<h3 id="features"><a class="doc-anchor" href="#features">§</a>Features</h3>
+<ul>
+<li>LED display driver with fonts</li>
+<li>Uses embassy-nrf HAL for peripherals</li>
+<li>Rust Async/Await</li>
+</ul>
+<h3 id="example-application"><a class="doc-anchor" href="#example-application">§</a>Example application</h3>
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="attr">#![no_std]
+#![no_main]
+
+</span><span class="kw">use </span>{defmt_rtt <span class="kw">as _</span>, panic_probe <span class="kw">as _</span>};
+
+<span class="kw">use </span>microbit_bsp::<span class="kw-2">*</span>;
+
+<span class="kw">use </span>{
+    embassy_executor::Spawner,
+    embassy_futures::select::{select, Either},
+    embassy_time::Duration,
+};
+
+<span class="attr">#[embassy_executor::main]
+</span><span class="kw">async fn </span>main(_spawner: Spawner) {
+    <span class="kw">let </span>board = Microbit::default();
+
+    <span class="kw">let </span><span class="kw-2">mut </span>display = board.display;
+    <span class="kw">let </span><span class="kw-2">mut </span>btn_a = board.btn_a;
+    <span class="kw">let </span><span class="kw-2">mut </span>btn_b = board.btn_b;
+
+    display.set_brightness(display::Brightness::MAX);
+    display.scroll(<span class="string">"Hello, World!"</span>).<span class="kw">await</span>;
+    <span class="macro">defmt::info!</span>(<span class="string">"Application started, press buttons!"</span>);
+    <span class="kw">loop </span>{
+        <span class="kw">match </span>select(btn_a.wait_for_low(), btn_b.wait_for_low()).<span class="kw">await </span>{
+            Either::First(<span class="kw">_</span>) =&gt; {
+                display
+                    .display(display::fonts::ARROW_LEFT, Duration::from_secs(<span class="number">1</span>))
+                    .<span class="kw">await</span>;
+            }
+            Either::Second(<span class="kw">_</span>) =&gt; {
+                display
+                    .display(display::fonts::ARROW_RIGHT, Duration::from_secs(<span class="number">1</span>))
+                    .<span class="kw">await</span>;
+            }
+        }
+    }
+}</code></pre></div>
+<h3 id="examples"><a class="doc-anchor" href="#examples">§</a>Examples</h3>
+<p>To run an example:</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code>cd examples/display
+cargo run --release</code></pre></div>
+<h3 id="cargo-features"><a class="doc-anchor" href="#cargo-features">§</a>Cargo Features</h3>
+<p>The feature <code>defmt</code> is enabled by default, and allows
+some crates to print things.</p>
+</div></details><h2 id="reexports" class="section-header">Re-exports<a href="#reexports" class="anchor">§</a></h2><ul class="item-table"><li><div class="item-name" id="reexport.embassy_nrf"><code>pub use <a class="mod" href="../embassy_nrf/index.html" title="mod embassy_nrf">embassy_nrf</a>;</code></div></li><li><div class="item-name" id="reexport.lsm303agr"><code>pub use <a class="mod" href="../lsm303agr/index.html" title="mod lsm303agr">lsm303agr</a>;</code></div></li></ul><h2 id="modules" class="section-header">Modules<a href="#modules" class="anchor">§</a></h2><ul class="item-table"><li><div class="item-name"><a class="mod" href="accelerometer/index.html" title="mod microbit_bsp::accelerometer">accelerometer</a></div><div class="desc docblock-short">Accelerometer for the micro:bit</div></li><li><div class="item-name"><a class="mod" href="display/index.html" title="mod microbit_bsp::display">display</a></div><div class="desc docblock-short">Driver a NxM LED matrix display</div></li><li><div class="item-name"><a class="mod" href="mic/index.html" title="mod microbit_bsp::mic">mic</a></div><div class="desc docblock-short">micrphone peripheral</div></li><li><div class="item-name"><a class="mod" href="speaker/index.html" title="mod microbit_bsp::speaker">speaker</a></div><div class="desc docblock-short">Simple speaker utilities for PWM-based synth</div></li><li><div class="item-name"><a class="mod" href="wdt/index.html" title="mod microbit_bsp::wdt">wdt</a></div><div class="desc docblock-short">Watchdog Timer (WDT) driver.</div></li></ul><h2 id="structs" class="section-header">Structs<a href="#structs" class="anchor">§</a></h2><ul class="item-table"><li><div class="item-name"><a class="struct" href="struct.Config.html" title="struct microbit_bsp::Config">Config</a></div><div class="desc docblock-short">Configuration for peripherals. Default configuration should work on any nRF chip.</div></li><li><div class="item-name"><a class="struct" href="struct.Microbit.html" title="struct microbit_bsp::Microbit">Microbit</a></div><div class="desc docblock-short">Represents all the peripherals and pins available for the BBC micro:bit.</div></li></ul><h2 id="enums" class="section-header">Enums<a href="#enums" class="anchor">§</a></h2><ul class="item-table"><li><div class="item-name"><a class="enum" href="enum.Priority.html" title="enum microbit_bsp::Priority">Priority</a></div><div class="desc docblock-short">The interrupt priority level.</div></li></ul><h2 id="types" class="section-header">Type Aliases<a href="#types" class="anchor">§</a></h2><ul class="item-table"><li><div class="item-name"><a class="type" href="type.Button.html" title="type microbit_bsp::Button">Button</a></div><div class="desc docblock-short">Button ‘A’</div></li><li><div class="item-name"><a class="type" href="type.LedMatrix.html" title="type microbit_bsp::LedMatrix">LedMatrix</a></div><div class="desc docblock-short">LED matrix peripheral for the micro:bit</div></li></ul></section></div></main></body></html>

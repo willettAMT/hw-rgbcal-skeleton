@@ -1,0 +1,363 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Startup code and minimal runtime for Cortex-M microcontrollers"><title>cortex_m_rt - Rust</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../static.files/rustdoc-46132b98.css"><meta name="rustdoc-vars" data-root-path="../" data-static-root-path="../static.files/" data-current-crate="cortex_m_rt" data-themes="" data-resource-suffix="" data-rustdoc-version="1.85.1 (4eb161250 2025-03-15)" data-channel="1.85.1" data-search-js="search-75f5ac3e.js" data-settings-js="settings-0f613d39.js" ><script src="../static.files/storage-59e33391.js"></script><script defer src="../crates.js"></script><script defer src="../static.files/main-5f194d8c.js"></script><noscript><link rel="stylesheet" href="../static.files/noscript-893ab5e7.css"></noscript><link rel="alternate icon" type="image/png" href="../static.files/favicon-32x32-6580c154.png"><link rel="icon" type="image/svg+xml" href="../static.files/favicon-044be391.svg"></head><body class="rustdoc mod crate"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle" title="show sidebar"></button></nav><nav class="sidebar"><div class="sidebar-crate"><h2><a href="../cortex_m_rt/index.html">cortex_<wbr>m_<wbr>rt</a><span class="version">0.7.5</span></h2></div><div class="sidebar-elems"><ul class="block"><li><a id="all-types" href="all.html">All Items</a></li></ul><section id="rustdoc-toc"><h3><a href="#">Sections</a></h3><ul class="block top-toc"><li><a href="#features" title="Features">Features</a></li><li><a href="#requirements" title="Requirements">Requirements</a><ul><li><a href="#memoryx" title="`memory.x`"><code>memory.x</code></a></li></ul></li><li><a href="#an-example" title="An example">An example</a></li><li><a href="#optional-features" title="Optional features">Optional features</a><ul><li><a href="#device" title="`device`"><code>device</code></a></li><li><a href="#set-sp" title="`set-sp`"><code>set-sp</code></a></li><li><a href="#set-vtor" title="`set-vtor`"><code>set-vtor</code></a></li><li><a href="#zero-init-ram" title="`zero-init-ram`"><code>zero-init-ram</code></a></li><li><a href="#paint-stack" title="`paint-stack`"><code>paint-stack</code></a></li></ul></li><li><a href="#inspection" title="Inspection">Inspection</a><ul><li><a href="#sections-size" title="Sections (`size`)">Sections (<code>size</code>)</a></li><li><a href="#symbols-objdump-nm" title="Symbols (`objdump`, `nm`)">Symbols (<code>objdump</code>, <code>nm</code>)</a></li></ul></li><li><a href="#advanced-usage" title="Advanced usage">Advanced usage</a><ul><li><a href="#custom-linker-script" title="Custom linker script">Custom linker script</a></li><li><a href="#setting-the-program-entry-point" title="Setting the program entry point">Setting the program entry point</a></li><li><a href="#incorporating-device-specific-interrupts" title="Incorporating device specific interrupts">Incorporating device specific interrupts</a></li><li><a href="#uninitialized-static-variables" title="Uninitialized static variables">Uninitialized static variables</a></li><li><a href="#extra-sections" title="Extra Sections">Extra Sections</a></li></ul></li><li><a href="#minimum-supported-rust-version-msrv" title="Minimum Supported Rust Version (MSRV)">Minimum Supported Rust Version (MSRV)</a></li></ul><h3><a href="#structs">Crate Items</a></h3><ul class="block"><li><a href="#structs" title="Structs">Structs</a></li><li><a href="#functions" title="Functions">Functions</a></li><li><a href="#attributes" title="Attribute Macros">Attribute Macros</a></li></ul></section><div id="rustdoc-modnav"></div></div></nav><div class="sidebar-resizer"></div><main><div class="width-limiter"><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><h1>Crate <span>cortex_m_rt</span><button id="copy-path" title="Copy item path to clipboard">Copy item path</button></h1><rustdoc-toolbar></rustdoc-toolbar><span class="sub-heading"><a class="src" href="../src/cortex_m_rt/lib.rs.html#1-1282">Source</a> </span></div><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>Startup code and minimal runtime for Cortex-M microcontrollers</p>
+<p>This crate contains all the required parts to build a <code>no_std</code> application (binary crate) that
+targets a Cortex-M microcontroller.</p>
+<h2 id="features"><a class="doc-anchor" href="#features">§</a>Features</h2>
+<p>This crates takes care of:</p>
+<ul>
+<li>
+<p>The memory layout of the program. In particular, it populates the vector table so the device
+can boot correctly, and properly dispatch exceptions and interrupts.</p>
+</li>
+<li>
+<p>Initializing <code>static</code> variables before the program entry point.</p>
+</li>
+<li>
+<p>Enabling the FPU before the program entry point if the target is <code>-eabihf</code>.</p>
+</li>
+</ul>
+<p>This crate also provides the following attributes:</p>
+<ul>
+<li><a href="attr.entry.html"><code>#[entry]</code></a> to declare the entry point of the program</li>
+<li><a href="attr.exception.html"><code>#[exception]</code></a> to override an exception handler. If not overridden all
+exception handlers default to an infinite loop.</li>
+</ul>
+<p>This crate also implements a related attribute called <code>#[interrupt]</code>, which allows you
+to define interrupt handlers. However, since which interrupts are available depends on the
+microcontroller in use, this attribute should be re-exported and used from a peripheral
+access crate (PAC).</p>
+<p>A <a href="attr.pre_init.html"><code>#[pre_init]</code></a> macro is also provided to run a function before RAM
+initialisation, but its use is deprecated as it is not defined behaviour to execute Rust
+code before initialisation. It is still possible to create a custom <code>pre_init</code> function
+using assembly.</p>
+<p>The documentation for these attributes can be found in the <a href="#attributes">Attribute Macros</a>
+section.</p>
+<h2 id="requirements"><a class="doc-anchor" href="#requirements">§</a>Requirements</h2><h3 id="memoryx"><a class="doc-anchor" href="#memoryx">§</a><code>memory.x</code></h3>
+<p>This crate expects the user, or some other crate, to provide the memory layout of the target
+device via a linker script named <code>memory.x</code>, described in this section.  The <code>memory.x</code> file is
+used during linking by the <code>link.x</code> script provided by this crate. If you are using a custom
+linker script, you do not need a <code>memory.x</code> file.</p>
+<h4 id="memory"><a class="doc-anchor" href="#memory">§</a><code>MEMORY</code></h4>
+<p>The linker script must specify the memory available in the device as, at least, two <code>MEMORY</code>
+regions: one named <code>FLASH</code> and one named <code>RAM</code>. The <code>.text</code> and <code>.rodata</code> sections of the
+program will be placed in the <code>FLASH</code> region, whereas the <code>.bss</code> and <code>.data</code> sections, as well
+as the heap, will be placed in the <code>RAM</code> region.</p>
+<div class="example-wrap"><pre class="language-text"><code>/* Linker script for the STM32F103C8T6 */
+MEMORY
+{
+  FLASH : ORIGIN = 0x08000000, LENGTH = 64K
+  RAM   : ORIGIN = 0x20000000, LENGTH = 20K
+}</code></pre></div><h4 id="_stack_start--_stack_end"><a class="doc-anchor" href="#_stack_start--_stack_end">§</a><code>_stack_start</code> / <code>_stack_end</code></h4>
+<p>The <code>_stack_start</code> optional symbol can be used to indicate where the call stack of the program
+should be placed. If this symbol is not used then the stack will be placed at the <em>end</em> of the
+<code>RAM</code> region – the stack grows downwards towards smaller address. This is generally a sensible
+default and most applications will not need to specify <code>_stack_start</code>. The same goes for
+<code>_stack_end</code> which is automatically placed after the end of statically allocated RAM.</p>
+<p><strong>NOTE:</strong> If you change <code>_stack_start</code>, make sure to also set <code>_stack_end</code> correctly to match
+new stack area if you are using it, e.g for MSPLIM. The <code>_stack_end</code> is not used internally by
+<code>cortex-m-rt</code> and is only for application use.</p>
+<p>For Cortex-M, the <code>_stack_start</code> must always be aligned to 8 bytes, which is enforced by
+the linker script. If you override it, ensure that whatever value you set is a multiple
+of 8 bytes. The <code>_stack_end</code> is aligned to 4 bytes.</p>
+<p>This symbol can be used to place the stack in a different memory region, for example:</p>
+<div class="example-wrap"><pre class="language-text"><code>/* Linker script for the STM32F303VCT6 with stack in CCM */
+MEMORY
+{
+    FLASH : ORIGIN = 0x08000000, LENGTH = 256K
+
+    /* .bss, .data and the heap go in this region */
+    RAM   : ORIGIN = 0x20000000, LENGTH = 40K
+
+    /* Core coupled (faster) RAM dedicated to hold the stack */
+    CCRAM : ORIGIN = 0x10000000, LENGTH = 8K
+}
+
+_stack_start = ORIGIN(CCRAM) + LENGTH(CCRAM);
+_stack_end = ORIGIN(CCRAM); /* Optional, add if used by the application */</code></pre></div><h4 id="_stext"><a class="doc-anchor" href="#_stext">§</a><code>_stext</code></h4>
+<p>This optional symbol can be used to control where the <code>.text</code> section is placed. If omitted the
+<code>.text</code> section will be placed right after the vector table, which is placed at the beginning of
+<code>FLASH</code>. Some devices store settings like Flash configuration right after the vector table;
+for these devices one must place the <code>.text</code> section after this configuration section –
+<code>_stext</code> can be used for this purpose.</p>
+<div class="example-wrap"><pre class="language-text"><code>MEMORY
+{
+  /* .. */
+}
+
+/* The device stores Flash configuration in 0x400-0x40C so we place .text after that */
+_stext = ORIGIN(FLASH) + 0x40C</code></pre></div><h2 id="an-example"><a class="doc-anchor" href="#an-example">§</a>An example</h2>
+<p>This section presents a minimal application built on top of <code>cortex-m-rt</code>. Apart from the
+mandatory <code>memory.x</code> linker script describing the memory layout of the device, the hard fault
+handler and the default exception handler must also be defined somewhere in the dependency
+graph (see [<code>#[exception]</code>]). In this example we define them in the binary crate:</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="attr">#![no_main]
+#![no_std]
+
+</span><span class="comment">// Some panic handler needs to be included. This one halts the processor on panic.
+</span><span class="kw">use </span>panic_halt <span class="kw">as _</span>;
+
+<span class="kw">use </span>cortex_m_rt::entry;
+
+<span class="comment">// Use `main` as the entry point of this application, which may not return.
+</span><span class="attr">#[entry]
+</span><span class="kw">fn </span>main() -&gt; ! {
+    <span class="comment">// initialization
+
+    </span><span class="kw">loop </span>{
+        <span class="comment">// application logic
+    </span>}
+}</code></pre></div>
+<p>To actually build this program you need to place a <code>memory.x</code> linker script somewhere the linker
+can find it, e.g. in the current directory; and then link the program using <code>cortex-m-rt</code>’s
+linker script: <code>link.x</code>. The required steps are shown below:</p>
+<div class="example-wrap"><pre class="language-text"><code>$ cat &gt; memory.x &lt;&lt;EOF
+MEMORY
+{
+  FLASH : ORIGIN = 0x08000000, LENGTH = 64K
+  RAM : ORIGIN = 0x20000000, LENGTH = 20K
+}
+EOF
+
+$ cargo rustc --target thumbv7m-none-eabi -- -C link-arg=-nostartfiles -C link-arg=-Tlink.x
+
+$ file target/thumbv7m-none-eabi/debug/app
+app: ELF 32-bit LSB executable, ARM, EABI5 version 1 (SYSV), statically linked, (..)</code></pre></div><h2 id="optional-features"><a class="doc-anchor" href="#optional-features">§</a>Optional features</h2><h3 id="device"><a class="doc-anchor" href="#device">§</a><code>device</code></h3>
+<p>If this feature is disabled then this crate populates the whole vector table. All the interrupts
+in the vector table, even the ones unused by the target device, will be bound to the default
+exception handler. This makes the final application device agnostic: you will be able to run it
+on any Cortex-M device – provided that you correctly specified its memory layout in <code>memory.x</code>
+– without hitting undefined behavior.</p>
+<p>If this feature is enabled then the interrupts section of the vector table is left unpopulated
+and some other crate, or the user, will have to populate it. This mode is meant to be used in
+conjunction with crates generated using <code>svd2rust</code>. Those peripheral access crates, or PACs,
+will populate the missing part of the vector table when their <code>"rt"</code> feature is enabled.</p>
+<h3 id="set-sp"><a class="doc-anchor" href="#set-sp">§</a><code>set-sp</code></h3>
+<p>If this feature is enabled, the stack pointer (SP) is initialised in the reset handler to the
+<code>_stack_start</code> value from the linker script. This is not usually required, but some debuggers
+do not initialise SP when performing a soft reset, which can lead to stack corruption.</p>
+<h3 id="set-vtor"><a class="doc-anchor" href="#set-vtor">§</a><code>set-vtor</code></h3>
+<p>If this feature is enabled, the vector table offset register (VTOR) is initialised in the reset
+handler to the start of the vector table defined in the linker script. This is not usually
+required, but some bootloaders do not set VTOR before jumping to application code, leading to
+your main function executing but interrupt handlers not being used.</p>
+<h3 id="zero-init-ram"><a class="doc-anchor" href="#zero-init-ram">§</a><code>zero-init-ram</code></h3>
+<p>If this feature is enabled, RAM is initialized with zeros during startup from the <code>_ram_start</code>
+value to the <code>_ram_end</code> value from the linker script. This is not usually required, but might be
+necessary to properly initialize memory integrity measures on some hardware.</p>
+<h3 id="paint-stack"><a class="doc-anchor" href="#paint-stack">§</a><code>paint-stack</code></h3>
+<p>Everywhere between <code>__sheap</code> and <code>_stack_start</code> is painted with the fixed value
+<code>STACK_PAINT_VALUE</code>, which is <code>0xCCCC_CCCC</code>.
+You can then inspect memory during debugging to determine how much of the stack has been used -
+where the stack has been used the ‘paint’ will have been ‘scrubbed off’ and the memory will
+have a value other than <code>STACK_PAINT_VALUE</code>.</p>
+<h2 id="inspection"><a class="doc-anchor" href="#inspection">§</a>Inspection</h2>
+<p>This section covers how to inspect a binary that builds on top of <code>cortex-m-rt</code>.</p>
+<h3 id="sections-size"><a class="doc-anchor" href="#sections-size">§</a>Sections (<code>size</code>)</h3>
+<p><code>cortex-m-rt</code> uses standard sections like <code>.text</code>, <code>.rodata</code>, <code>.bss</code> and <code>.data</code> as one would
+expect. <code>cortex-m-rt</code> separates the vector table in its own section, named <code>.vector_table</code>. This
+lets you distinguish how much space is taking the vector table in Flash vs how much is being
+used by actual instructions (<code>.text</code>) and constants (<code>.rodata</code>).</p>
+<div class="example-wrap"><pre class="language-text"><code>$ size -Ax target/thumbv7m-none-eabi/examples/app
+target/thumbv7m-none-eabi/release/examples/app  :
+section             size         addr
+.vector_table      0x400    0x8000000
+.text               0x88    0x8000400
+.rodata              0x0    0x8000488
+.data                0x0   0x20000000
+.bss                 0x0   0x20000000</code></pre></div>
+<p>Without the <code>-A</code> argument <code>size</code> reports the sum of the sizes of <code>.text</code>, <code>.rodata</code> and
+<code>.vector_table</code> under “text”.</p>
+<div class="example-wrap"><pre class="language-text"><code>$ size target/thumbv7m-none-eabi/examples/app
+  text    data     bss     dec     hex filename
+  1160       0       0    1660     67c target/thumbv7m-none-eabi/release/app</code></pre></div><h3 id="symbols-objdump-nm"><a class="doc-anchor" href="#symbols-objdump-nm">§</a>Symbols (<code>objdump</code>, <code>nm</code>)</h3>
+<p>One will always find the following (unmangled) symbols in <code>cortex-m-rt</code> applications:</p>
+<ul>
+<li>
+<p><code>Reset</code>. This is the reset handler. The microcontroller will execute this function upon
+booting. This function will call the user program entry point (cf. <a href="attr.entry.html"><code>#[entry]</code></a>)
+using the <code>main</code> symbol so you will also find that symbol in your program.</p>
+</li>
+<li>
+<p><code>DefaultHandler</code>. This is the default handler. If not overridden using <code>#[exception] fn DefaultHandler(..</code> this will be an infinite loop.</p>
+</li>
+<li>
+<p><code>HardFault</code> and <code>_HardFault</code>. These function handle the hard fault handling and what they
+do depends on whether the hard fault is overridden and whether the trampoline is enabled (which it is by default).</p>
+<ul>
+<li>No override: Both are the same function. The function is an infinite loop defined in the cortex-m-rt crate.</li>
+<li>Trampoline enabled: <code>HardFault</code> is the real hard fault handler defined in assembly. This function is simply a
+trampoline that jumps into the rust defined <code>_HardFault</code> function. This second function jumps to the user-defined
+handler with the exception frame as parameter. This second jump is usually optimised away with inlining.</li>
+<li>Trampoline disabled: <code>HardFault</code> is the user defined function. This means the user function is called directly
+from the vector table. <code>_HardFault</code> still exists, but is an empty function that is purely there for compiler
+diagnostics.</li>
+</ul>
+</li>
+<li>
+<p><code>__STACK_START</code>. This is the first entry in the <code>.vector_table</code> section. This symbol contains
+the initial value of the stack pointer; this is where the stack will be located – the stack
+grows downwards towards smaller addresses.</p>
+</li>
+<li>
+<p><code>__RESET_VECTOR</code>. This is the reset vector, a pointer to the <code>Reset</code> function. This vector
+is located in the <code>.vector_table</code> section after <code>__STACK_START</code>.</p>
+</li>
+<li>
+<p><code>__EXCEPTIONS</code>. This is the core exceptions portion of the vector table; it’s an array of 14
+exception vectors, which includes exceptions like <code>HardFault</code> and <code>SysTick</code>. This array is
+located after <code>__RESET_VECTOR</code> in the <code>.vector_table</code> section.</p>
+</li>
+<li>
+<p><code>__INTERRUPTS</code>. This is the device specific interrupt portion of the vector table; its exact
+size depends on the target device but if the <code>"device"</code> feature has not been enabled it will
+have a size of 32 vectors (on ARMv6-M), 240 vectors (on ARMv7-M) or 496 vectors (on ARMv8-M).
+This array is located after <code>__EXCEPTIONS</code> in the <code>.vector_table</code> section.</p>
+</li>
+<li>
+<p><code>__pre_init</code>. This is a function to be run before RAM is initialized. It defaults to an empty
+function. As this runs before RAM is initialised, it is not sound to use a Rust function for
+<code>pre_init</code>, and instead it should typically be written in assembly using <code>global_asm</code> or an
+external assembly file.</p>
+</li>
+</ul>
+<p>If you override any exception handler you’ll find it as an unmangled symbol, e.g. <code>SysTick</code> or
+<code>SVCall</code>, in the output of <code>objdump</code>,</p>
+<h2 id="advanced-usage"><a class="doc-anchor" href="#advanced-usage">§</a>Advanced usage</h2><h3 id="custom-linker-script"><a class="doc-anchor" href="#custom-linker-script">§</a>Custom linker script</h3>
+<p>To use your own linker script, ensure it is placed in the linker search path (for example in
+the crate root or in Cargo’s <code>OUT_DIR</code>) and use it with <code>-C link-arg=-Tmy_script.ld</code> instead
+of the normal <code>-C link-arg=-Tlink.x</code>. The provided <code>link.x</code> may be used as a starting point
+for customisation.</p>
+<h3 id="setting-the-program-entry-point"><a class="doc-anchor" href="#setting-the-program-entry-point">§</a>Setting the program entry point</h3>
+<p>This section describes how <a href="attr.entry.html"><code>#[entry]</code></a> is implemented. This information is useful
+to developers who want to provide an alternative to <a href="attr.entry.html"><code>#[entry]</code></a> that provides extra
+guarantees.</p>
+<p>The <code>Reset</code> handler will call a symbol named <code>main</code> (unmangled) <em>after</em> initializing <code>.bss</code> and
+<code>.data</code>, and enabling the FPU (if the target has an FPU). A function with the <code>entry</code> attribute
+will be set to have the export name “<code>main</code>”; in addition, its mutable statics are turned into
+safe mutable references (see <a href="attr.entry.html"><code>#[entry]</code></a> for details).</p>
+<p>The unmangled <code>main</code> symbol must have signature <code>extern "C" fn() -&gt; !</code> or its invocation from
+<code>Reset</code>  will result in undefined behavior.</p>
+<h3 id="incorporating-device-specific-interrupts"><a class="doc-anchor" href="#incorporating-device-specific-interrupts">§</a>Incorporating device specific interrupts</h3>
+<p>This section covers how an external crate can insert device specific interrupt handlers into the
+vector table. Most users don’t need to concern themselves with these details, but if you are
+interested in how PACs generated using <code>svd2rust</code> integrate with <code>cortex-m-rt</code> read on.</p>
+<p>The information in this section applies when the <code>"device"</code> feature has been enabled.</p>
+<h4 id="__interrupts"><a class="doc-anchor" href="#__interrupts">§</a><code>__INTERRUPTS</code></h4>
+<p>The external crate must provide the interrupts portion of the vector table via a <code>static</code>
+variable named<code>__INTERRUPTS</code> (unmangled) that must be placed in the <code>.vector_table.interrupts</code>
+section of its object file.</p>
+<p>This <code>static</code> variable will be placed at <code>ORIGIN(FLASH) + 0x40</code>. This address corresponds to the
+spot where IRQ0 (IRQ number 0) is located.</p>
+<p>To conform to the Cortex-M ABI <code>__INTERRUPTS</code> must be an array of function pointers; some spots
+in this array may need to be set to 0 if they are marked as <em>reserved</em> in the data sheet /
+reference manual. We recommend using a <code>union</code> to set the reserved spots to <code>0</code>; <code>None</code>
+(<code>Option&lt;fn()&gt;</code>) may also work but it’s not guaranteed that the <code>None</code> variant will <em>always</em> be
+represented by the value <code>0</code>.</p>
+<p>Let’s illustrate with an artificial example where a device only has two interrupt: <code>Foo</code>, with
+IRQ number = 2, and <code>Bar</code>, with IRQ number = 4.</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">pub union </span>Vector {
+    handler: <span class="kw">unsafe extern </span><span class="string">"C" </span><span class="kw">fn</span>(),
+    reserved: usize,
+}
+
+<span class="kw">extern </span><span class="string">"C" </span>{
+    <span class="kw">fn </span>Foo();
+    <span class="kw">fn </span>Bar();
+}
+
+<span class="attr">#[link_section = <span class="string">".vector_table.interrupts"</span>]
+#[no_mangle]
+</span><span class="kw">pub static </span>__INTERRUPTS: [Vector; <span class="number">5</span>] = [
+    <span class="comment">// 0-1: Reserved
+    </span>Vector { reserved: <span class="number">0 </span>},
+    Vector { reserved: <span class="number">0 </span>},
+
+    <span class="comment">// 2: Foo
+    </span>Vector { handler: Foo },
+
+    <span class="comment">// 3: Reserved
+    </span>Vector { reserved: <span class="number">0 </span>},
+
+    <span class="comment">// 4: Bar
+    </span>Vector { handler: Bar },
+];</code></pre></div>
+<h4 id="devicex"><a class="doc-anchor" href="#devicex">§</a><code>device.x</code></h4>
+<p>Linking in <code>__INTERRUPTS</code> creates a bunch of undefined references. If the user doesn’t set a
+handler for <em>all</em> the device specific interrupts then linking will fail with <code>"undefined reference"</code> errors.</p>
+<p>We want to provide a default handler for all the interrupts while still letting the user
+individually override each interrupt handler. In C projects, this is usually accomplished using
+weak aliases declared in external assembly files. We use a similar solution via the <code>PROVIDE</code>
+command in the linker script: when the <code>"device"</code> feature is enabled, <code>cortex-m-rt</code>’s linker
+script (<code>link.x</code>) includes a linker script named <code>device.x</code>, which must be provided by
+whichever crate provides <code>__INTERRUPTS</code>.</p>
+<p>For our running example the <code>device.x</code> linker script looks like this:</p>
+<div class="example-wrap"><pre class="language-text"><code>/* device.x */
+PROVIDE(Foo = DefaultHandler);
+PROVIDE(Bar = DefaultHandler);</code></pre></div>
+<p>This weakly aliases both <code>Foo</code> and <code>Bar</code>. <code>DefaultHandler</code> is the default exception handler and
+that the core exceptions use unless overridden.</p>
+<p>Because this linker script is provided by a dependency of the final application the dependency
+must contain a build script that puts <code>device.x</code> somewhere the linker can find. An example of
+such build script is shown below:</p>
+
+<div class="example-wrap ignore"><a href="#" class="tooltip" title="This example is not tested">ⓘ</a><pre class="rust rust-example-rendered"><code><span class="kw">use </span>std::env;
+<span class="kw">use </span>std::fs::File;
+<span class="kw">use </span>std::io::Write;
+<span class="kw">use </span>std::path::PathBuf;
+
+<span class="kw">fn </span>main() {
+    <span class="comment">// Put the linker script somewhere the linker can find it
+    </span><span class="kw">let </span>out = <span class="kw-2">&amp;</span>PathBuf::from(env::var_os(<span class="string">"OUT_DIR"</span>).unwrap());
+    File::create(out.join(<span class="string">"device.x"</span>))
+        .unwrap()
+        .write_all(<span class="macro">include_bytes!</span>(<span class="string">"device.x"</span>))
+        .unwrap();
+    <span class="macro">println!</span>(<span class="string">"cargo:rustc-link-search={}"</span>, out.display());
+}</code></pre></div>
+<h3 id="uninitialized-static-variables"><a class="doc-anchor" href="#uninitialized-static-variables">§</a>Uninitialized static variables</h3>
+<p>The <code>.uninit</code> linker section can be used to leave <code>static mut</code> variables uninitialized. One use
+case of unitialized static variables is to avoid zeroing large statically allocated buffers (say
+to be used as thread stacks) – this can considerably reduce initialization time on devices that
+operate at low frequencies.</p>
+<p>The only correct way to use this section is with <a href="https://doc.rust-lang.org/core/mem/union.MaybeUninit.html"><code>MaybeUninit</code></a> types.</p>
+
+<div class="example-wrap edition"><a href="#" class="tooltip" title="This example runs with edition 2018">ⓘ</a><pre class="rust rust-example-rendered"><code><span class="kw">use </span>core::mem::MaybeUninit;
+
+<span class="kw">const </span>STACK_SIZE: usize = <span class="number">8 </span>* <span class="number">1024</span>;
+<span class="kw">const </span>NTHREADS: usize = <span class="number">4</span>;
+
+<span class="attr">#[link_section = <span class="string">".uninit.STACKS"</span>]
+</span><span class="kw">static </span><span class="kw-2">mut </span>STACKS: MaybeUninit&lt;[[u8; STACK_SIZE]; NTHREADS]&gt; = MaybeUninit::uninit();</code></pre></div>
+<p>Be very careful with the <code>link_section</code> attribute because it’s easy to misuse in ways that cause
+undefined behavior.</p>
+<h3 id="extra-sections"><a class="doc-anchor" href="#extra-sections">§</a>Extra Sections</h3>
+<p>Some microcontrollers provide additional memory regions beyond RAM and FLASH. For example,
+some STM32 devices provide “CCM” or core-coupled RAM that is only accessible from the core. In
+order to place variables in these sections using <a href="https://doc.rust-lang.org/reference/abi.html#the-link_section-attribute"><code>link_section</code></a> attributes from your code,
+you need to modify <code>memory.x</code> to declare the additional sections:</p>
+<div class="example-wrap"><pre class="language-text"><code>MEMORY
+{
+    FLASH  (rx) : ORIGIN = 0x08000000, LENGTH = 1024K
+    RAM    (rw) : ORIGIN = 0x20000000, LENGTH = 128K
+    CCMRAM (rw) : ORIGIN = 0x10000000, LENGTH = 64K
+}
+
+SECTIONS
+{
+    .ccmram (NOLOAD) : ALIGN(4)
+    {
+        *(.ccmram .ccmram.*);
+        . = ALIGN(4);
+    } &gt; CCMRAM
+}</code></pre></div>
+<p>You can then use something like this to place a variable into this specific section of memory:</p>
+
+<div class="example-wrap edition"><a href="#" class="tooltip" title="This example runs with edition 2018">ⓘ</a><pre class="rust rust-example-rendered"><code><span class="attr">#[link_section=<span class="string">".ccmram.BUFFERS"</span>]
+</span><span class="kw">static </span><span class="kw-2">mut </span>BUF: MaybeUninit&lt;[u8; <span class="number">1024</span>]&gt; = MaybeUninit::uninit();</code></pre></div>
+<p>However, note that these sections are not initialised by cortex-m-rt, and so must be used
+either with <code>MaybeUninit</code> types or you must otherwise arrange for them to be initialised
+yourself, such as in <code>pre_init</code>.</p>
+<h2 id="minimum-supported-rust-version-msrv"><a class="doc-anchor" href="#minimum-supported-rust-version-msrv">§</a>Minimum Supported Rust Version (MSRV)</h2>
+<p>The MSRV of this release is Rust 1.61.0.</p>
+</div></details><h2 id="structs" class="section-header">Structs<a href="#structs" class="anchor">§</a></h2><ul class="item-table"><li><div class="item-name"><a class="struct" href="struct.ExceptionFrame.html" title="struct cortex_m_rt::ExceptionFrame">Exception<wbr>Frame</a></div><div class="desc docblock-short">Registers stacked (pushed onto the stack) during an exception.</div></li></ul><h2 id="functions" class="section-header">Functions<a href="#functions" class="anchor">§</a></h2><ul class="item-table"><li><div class="item-name"><a class="fn" href="fn.heap_start.html" title="fn cortex_m_rt::heap_start">heap_<wbr>start</a></div><div class="desc docblock-short">Returns a pointer to the start of the heap</div></li></ul><h2 id="attributes" class="section-header">Attribute Macros<a href="#attributes" class="anchor">§</a></h2><ul class="item-table"><li><div class="item-name"><a class="attr" href="attr.entry.html" title="attr cortex_m_rt::entry">entry</a></div><div class="desc docblock-short">Attribute to declare the entry point of the program</div></li><li><div class="item-name"><a class="attr" href="attr.exception.html" title="attr cortex_m_rt::exception">exception</a></div><div class="desc docblock-short">Attribute to declare an exception handler</div></li><li><div class="item-name"><a class="attr" href="attr.interrupt.html" title="attr cortex_m_rt::interrupt">interrupt</a></div><div class="desc docblock-short">Attribute to declare an interrupt (AKA device-specific exception) handler</div></li><li><div class="item-name"><a class="attr" href="attr.pre_init.html" title="attr cortex_m_rt::pre_init">pre_<wbr>init</a></div><div class="desc docblock-short">Attribute to mark which function will be called at the beginning of the reset handler.</div></li></ul></section></div></main></body></html>

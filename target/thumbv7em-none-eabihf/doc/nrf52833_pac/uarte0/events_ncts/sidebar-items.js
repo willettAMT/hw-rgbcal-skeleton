@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["EVENTS_NCTS_A"],"struct":["EVENTS_NCTS_SPEC","R","W"],"type":["EVENTS_NCTS_R","EVENTS_NCTS_W"]};

@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["TASKS_CCASTOP_AW"],"struct":["TASKS_CCASTOP_SPEC","W"],"type":["TASKS_CCASTOP_W"]};

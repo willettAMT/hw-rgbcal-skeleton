@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["Debug","HfclkSource","LfclkSource"],"struct":["Config","DcdcConfig"]};
