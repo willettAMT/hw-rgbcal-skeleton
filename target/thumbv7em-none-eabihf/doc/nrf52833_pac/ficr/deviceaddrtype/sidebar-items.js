@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["DEVICEADDRTYPE_A"],"struct":["DEVICEADDRTYPE_SPEC","R"],"type":["DEVICEADDRTYPE_R"]};

@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["PART_A"],"struct":["PART_SPEC","R"],"type":["PART_R"]};

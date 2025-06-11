@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"attr":["entry","exception","interrupt","pre_init"],"fn":["heap_start"],"struct":["ExceptionFrame"]};

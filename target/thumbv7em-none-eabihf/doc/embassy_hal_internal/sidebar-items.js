@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"macro":["impl_peripheral","interrupt_mod","into_ref","peripherals","peripherals_definition","peripherals_struct"],"mod":["atomic_ring_buffer","drop","interrupt","ratio"],"struct":["PeripheralRef"],"trait":["Peripheral"]};

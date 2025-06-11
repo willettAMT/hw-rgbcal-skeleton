@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"struct":["R","WLENGTHL_SPEC"],"type":["WLENGTHL_R"]};

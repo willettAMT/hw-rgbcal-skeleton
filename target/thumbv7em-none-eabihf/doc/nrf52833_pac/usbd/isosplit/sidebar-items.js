@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["SPLIT_A"],"struct":["ISOSPLIT_SPEC","R","W"],"type":["SPLIT_R","SPLIT_W"]};

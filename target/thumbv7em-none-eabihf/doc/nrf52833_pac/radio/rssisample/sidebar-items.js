@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"struct":["R","RSSISAMPLE_SPEC"],"type":["RSSISAMPLE_R"]};

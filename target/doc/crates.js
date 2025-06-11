@@ -1,2 +1,0 @@
-window.ALL_CRATES = ["cortex_m_rt_macros","darling","darling_core","darling_macro","document_features","embassy_executor_macros","fnv","ident_case","litrs","proc_macro2","quote","strsim","syn","unicode_ident"];
-//{"start":21,"fragment_lengths":[20,10,15,16,20,26,6,13,8,14,8,9,6,16]}

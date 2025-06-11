@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["LIMITL_A"],"struct":["LIMITL_SPEC","R","W"],"type":["LIMITL_R","LIMITL_W"]};

@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["BB_STOP_A","BB_SUSPEND_A"],"struct":["R","SHORTS_SPEC","W"],"type":["BB_STOP_R","BB_STOP_W","BB_SUSPEND_R","BB_SUSPEND_W"]};

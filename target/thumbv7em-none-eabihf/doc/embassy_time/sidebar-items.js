@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"constant":["TICK_HZ"],"fn":["block_for","with_deadline","with_timeout"],"struct":["Delay","Duration","Instant","Ticker","TimeoutError","Timer"],"trait":["WithTimeout"]};

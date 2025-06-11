@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["InputChannelPolarity","OutputChannelPolarity"],"struct":["AnyChannel","InputChannel","OutputChannel"],"trait":["Channel"]};

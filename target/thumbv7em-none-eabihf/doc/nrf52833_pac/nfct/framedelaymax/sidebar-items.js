@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"struct":["FRAMEDELAYMAX_SPEC","R","W"],"type":["FRAMEDELAYMAX_R","FRAMEDELAYMAX_W"]};

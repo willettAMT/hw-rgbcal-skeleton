@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["BREQUEST_A"],"struct":["BREQUEST_SPEC","R"],"type":["BREQUEST_R"]};

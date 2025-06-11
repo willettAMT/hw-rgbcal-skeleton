@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"struct":["R","RXDELAY_SPEC","W"],"type":["RXDELAY_R","RXDELAY_W"]};

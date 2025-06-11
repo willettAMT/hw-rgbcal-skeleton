@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["ChannelMode"],"fn":["set_print_channel"],"macro":["debug_rprint","debug_rprintln","debug_rtt_init","debug_rtt_init_default","rdbg","rprint","rprintln","rtt_init","rtt_init_default","rtt_init_print"],"struct":["DownChannel","TerminalChannel","TerminalWriter","UpChannel","uWriter"]};

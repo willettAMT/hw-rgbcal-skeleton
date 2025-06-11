@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"struct":["MAXPACKETSIZE_SPEC","R","W"],"type":["MAXPACKETSIZE_R","MAXPACKETSIZE_W"]};

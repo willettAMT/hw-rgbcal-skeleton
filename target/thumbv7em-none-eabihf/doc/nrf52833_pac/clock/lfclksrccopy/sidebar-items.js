@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["SRC_A"],"struct":["LFCLKSRCCOPY_SPEC","R"],"type":["SRC_R"]};

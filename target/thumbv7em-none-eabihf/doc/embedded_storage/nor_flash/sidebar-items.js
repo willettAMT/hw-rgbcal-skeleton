@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["NorFlashErrorKind"],"fn":["check_erase","check_read","check_write"],"struct":["RmwMultiwriteNorFlashStorage","RmwNorFlashStorage"],"trait":["ErrorType","MultiwriteNorFlash","NorFlash","NorFlashError","ReadNorFlash"]};

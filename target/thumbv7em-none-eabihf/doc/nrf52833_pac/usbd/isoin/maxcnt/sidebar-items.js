@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"struct":["MAXCNT_SPEC","R","W"],"type":["MAXCNT_R","MAXCNT_W"]};

@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"mod":["amount","maxcnt","ptr"],"struct":["ISOIN"],"type":["AMOUNT","MAXCNT","PTR"]};

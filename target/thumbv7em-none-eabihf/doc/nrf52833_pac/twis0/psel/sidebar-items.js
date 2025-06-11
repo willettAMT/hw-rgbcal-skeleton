@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"mod":["scl","sda"],"struct":["PSEL"],"type":["SCL","SDA"]};

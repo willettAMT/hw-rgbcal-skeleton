@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["SLEEPSTATE_A"],"struct":["R","SLEEPSTATE_SPEC"],"type":["SLEEPSTATE_R"]};

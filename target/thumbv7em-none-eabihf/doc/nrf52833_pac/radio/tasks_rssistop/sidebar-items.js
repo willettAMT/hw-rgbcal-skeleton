@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["TASKS_RSSISTOP_AW"],"struct":["TASKS_RSSISTOP_SPEC","W"],"type":["TASKS_RSSISTOP_W"]};

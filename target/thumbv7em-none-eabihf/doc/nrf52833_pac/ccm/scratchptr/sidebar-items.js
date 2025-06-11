@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"struct":["R","SCRATCHPTR_SPEC","W"],"type":["SCRATCHPTR_R","SCRATCHPTR_W"]};

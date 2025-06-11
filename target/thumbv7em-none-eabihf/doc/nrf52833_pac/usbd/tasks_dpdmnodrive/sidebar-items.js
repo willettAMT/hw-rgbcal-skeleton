@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["TASKS_DPDMNODRIVE_AW"],"struct":["TASKS_DPDMNODRIVE_SPEC","W"],"type":["TASKS_DPDMNODRIVE_W"]};

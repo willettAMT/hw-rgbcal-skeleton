@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["DIR_A","DRIVE_A","INPUT_A","PULL_A","SENSE_A"],"struct":["PIN_CNF_SPEC","R","W"],"type":["DIR_R","DIR_W","DRIVE_R","DRIVE_W","INPUT_R","INPUT_W","PULL_R","PULL_W","SENSE_R","SENSE_W"]};

@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"struct":["DATAWHITEIV_SPEC","R","W"],"type":["DATAWHITEIV_R","DATAWHITEIV_W"]};

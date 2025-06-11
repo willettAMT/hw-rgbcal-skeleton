@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"struct":["GPREGRET2_SPEC","R","W"],"type":["GPREGRET_R","GPREGRET_W"]};

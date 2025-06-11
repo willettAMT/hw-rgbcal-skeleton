@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"fn":["write_aligned","write_all","write_fmt","write_str"],"struct":["Aligned"]};

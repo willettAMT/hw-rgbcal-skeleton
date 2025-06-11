@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"struct":["R","TXADDRESS_SPEC","W"],"type":["TXADDRESS_R","TXADDRESS_W"]};

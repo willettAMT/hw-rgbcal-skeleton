@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["FLASH_A"],"struct":["FLASH_SPEC","R"],"type":["FLASH_R"]};

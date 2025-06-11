@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["TASKS_STARTEPIN_AW"],"struct":["TASKS_STARTEPIN_SPEC","W"],"type":["TASKS_STARTEPIN_W"]};

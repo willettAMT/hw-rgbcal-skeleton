@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["LEN_A","SKIPADDR_A"],"struct":["CRCCNF_SPEC","R","W"],"type":["LEN_R","LEN_W","SKIPADDR_R","SKIPADDR_W"]};

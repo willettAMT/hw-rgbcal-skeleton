@@ -1,9 +1,0 @@
-(function() {
-    var type_impls = Object.fromEntries([["embassy_nrf",[["<details class=\"toggle implementors-toggle\" open><summary><section id=\"impl-MultiBuffering%3CS,+NB,+NS%3E\" class=\"impl\"><a class=\"src rightside\" href=\"src/embassy_nrf/i2s.rs.html#1110-1141\">Source</a><a href=\"#impl-MultiBuffering%3CS,+NB,+NS%3E\" class=\"anchor\">§</a><h3 class=\"code-header\">impl&lt;S: <a class=\"trait\" href=\"embassy_nrf/i2s/trait.Sample.html\" title=\"trait embassy_nrf::i2s::Sample\">Sample</a>, const NB: <a class=\"primitive\" href=\"https://doc.rust-lang.org/1.85.1/core/primitive.usize.html\">usize</a>, const NS: <a class=\"primitive\" href=\"https://doc.rust-lang.org/1.85.1/core/primitive.usize.html\">usize</a>&gt; <a class=\"struct\" href=\"embassy_nrf/i2s/struct.MultiBuffering.html\" title=\"struct embassy_nrf::i2s::MultiBuffering\">MultiBuffering</a>&lt;S, NB, NS&gt;</h3></section></summary><div class=\"impl-items\"><details class=\"toggle method-toggle\" open><summary><section id=\"method.new\" class=\"method\"><a class=\"src rightside\" href=\"src/embassy_nrf/i2s.rs.html#1112-1118\">Source</a><h4 class=\"code-header\">pub fn <a href=\"embassy_nrf/i2s/struct.MultiBuffering.html#tymethod.new\" class=\"fn\">new</a>() -&gt; Self</h4></section></summary><div class=\"docblock\"><p>Create a new <code>MultiBuffering</code>.</p>\n</div></details></div></details>",0,"embassy_nrf::i2s::DoubleBuffering"]]]]);
-    if (window.register_type_impls) {
-        window.register_type_impls(type_impls);
-    } else {
-        window.pending_type_impls = type_impls;
-    }
-})()
-//{"start":55,"fragment_lengths":[1375]}

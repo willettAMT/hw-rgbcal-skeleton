@@ -1,1 +1,0 @@
-{"rustc":8750902384292223123,"features":"[]","declared_features":"[\"alloc\", \"cfg-target-has-atomic\", \"default\", \"portable-atomic\", \"std\", \"unstable\"]","target":9453135960607436725,"profile":18292846234591021022,"path":14614589148732257352,"deps":[],"local":[{"Precalculated":"0.3.31"}],"rustflags":[],"config":2069994364910194474,"compile_kind":14087536846747939678}

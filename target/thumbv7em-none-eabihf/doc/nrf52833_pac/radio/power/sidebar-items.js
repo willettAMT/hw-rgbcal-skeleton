@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["POWER_A"],"struct":["POWER_SPEC","R","W"],"type":["POWER_R","POWER_W"]};

@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"struct":["ENDDELAY_SPEC","R","W"],"type":["CNT_R","CNT_W"]};

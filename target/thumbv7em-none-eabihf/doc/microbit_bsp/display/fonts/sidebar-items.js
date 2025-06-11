@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"constant":["ARROW_LEFT","ARROW_RIGHT","CHECK_MARK","CROSS_MARK"],"fn":["frame_5x5"]};

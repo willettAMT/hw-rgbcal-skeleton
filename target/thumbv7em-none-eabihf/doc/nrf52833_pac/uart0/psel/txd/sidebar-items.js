@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["CONNECT_A"],"struct":["R","TXD_SPEC","W"],"type":["CONNECT_R","CONNECT_W","PIN_R","PIN_W","PORT_R","PORT_W"]};

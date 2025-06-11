@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["Priority"],"mod":["accelerometer","display","mic","speaker","wdt"],"struct":["Config","Microbit"],"type":["Button","LedMatrix"]};

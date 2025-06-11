@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"mod":["substatra","substatwa"],"struct":["PERREGION"],"type":["SUBSTATRA","SUBSTATWA"]};

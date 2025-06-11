@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"mod":["unused"],"struct":["RegisterBlock"],"type":["UNUSED"]};

@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"fn":["drain","unfold"],"struct":["Close","Drain","Fanout","Feed","Flush","Send","SendAll","SinkErrInto","SinkMapErr","Unfold","With","WithFlatMap"],"trait":["Sink","SinkExt"]};

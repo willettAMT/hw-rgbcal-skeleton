@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["TASKS_RESUME_AW"],"struct":["TASKS_RESUME_SPEC","W"],"type":["TASKS_RESUME_W"]};

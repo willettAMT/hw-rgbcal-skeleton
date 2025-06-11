@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["PALL_A"],"struct":["APPROTECT_SPEC","R","W"],"type":["PALL_R","PALL_W"]};

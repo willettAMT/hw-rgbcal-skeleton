@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"struct":["R","SWITCHPATTERN_SPEC","W"],"type":["SWITCHPATTERN_R","SWITCHPATTERN_W"]};

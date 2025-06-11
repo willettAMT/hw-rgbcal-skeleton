@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"struct":["ACCDBL_SPEC","R"],"type":["ACCDBL_R"]};

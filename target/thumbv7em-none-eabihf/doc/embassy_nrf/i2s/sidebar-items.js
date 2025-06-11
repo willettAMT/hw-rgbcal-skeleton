@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["Align","ApproxSampleRate","Channels","Error","ExactSampleRate","Format","MckFreq","Ratio","SampleWidth"],"struct":["AlignedBuffer","Config","FullDuplexStream","I2S","InputStream","InterruptHandler","MasterClock","MultiBuffering","OutputStream"],"trait":["Instance","Sample"],"type":["DoubleBuffering"]};

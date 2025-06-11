@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["MAINREGSTATUS_A"],"struct":["MAINREGSTATUS_SPEC","R"],"type":["MAINREGSTATUS_R"]};

@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["TASKS_SHUTDOWN_AW"],"struct":["TASKS_SHUTDOWN_SPEC","W"],"type":["TASKS_SHUTDOWN_W"]};

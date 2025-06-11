@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["Direction","EndpointError","EndpointType","Event"],"struct":["EndpointAddress","EndpointAllocError","EndpointInfo","Unsupported"],"trait":["Bus","ControlPipe","Driver","Endpoint","EndpointIn","EndpointOut"]};

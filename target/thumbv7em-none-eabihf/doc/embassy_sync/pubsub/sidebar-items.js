@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["Error","WaitResult"],"mod":["publisher","subscriber"],"struct":["PubSubChannel"],"trait":["PubSubBehavior"]};

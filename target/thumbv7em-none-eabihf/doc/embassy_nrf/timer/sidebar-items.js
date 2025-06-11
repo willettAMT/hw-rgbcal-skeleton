@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["Frequency"],"struct":["Cc","Timer"],"trait":["ExtendedInstance","Instance"]};

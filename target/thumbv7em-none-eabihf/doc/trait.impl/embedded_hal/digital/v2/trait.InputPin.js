@@ -1,9 +1,0 @@
-(function() {
-    var implementors = Object.fromEntries([["embassy_nrf",[["impl&lt;'d, C: <a class=\"trait\" href=\"embassy_nrf/gpiote/trait.Channel.html\" title=\"trait embassy_nrf::gpiote::Channel\">Channel</a>, T: <a class=\"trait\" href=\"embassy_nrf/gpio/trait.Pin.html\" title=\"trait embassy_nrf::gpio::Pin\">GpioPin</a>&gt; <a class=\"trait\" href=\"embedded_hal/digital/v2/trait.InputPin.html\" title=\"trait embedded_hal::digital::v2::InputPin\">InputPin</a> for <a class=\"struct\" href=\"embassy_nrf/gpiote/struct.InputChannel.html\" title=\"struct embassy_nrf::gpiote::InputChannel\">InputChannel</a>&lt;'d, C, T&gt;"],["impl&lt;'d, T: <a class=\"trait\" href=\"embassy_nrf/gpio/trait.Pin.html\" title=\"trait embassy_nrf::gpio::Pin\">Pin</a>&gt; <a class=\"trait\" href=\"embedded_hal/digital/v2/trait.InputPin.html\" title=\"trait embedded_hal::digital::v2::InputPin\">InputPin</a> for <a class=\"struct\" href=\"embassy_nrf/gpio/struct.Flex.html\" title=\"struct embassy_nrf::gpio::Flex\">Flex</a>&lt;'d, T&gt;"],["impl&lt;'d, T: <a class=\"trait\" href=\"embassy_nrf/gpio/trait.Pin.html\" title=\"trait embassy_nrf::gpio::Pin\">Pin</a>&gt; <a class=\"trait\" href=\"embedded_hal/digital/v2/trait.InputPin.html\" title=\"trait embedded_hal::digital::v2::InputPin\">InputPin</a> for <a class=\"struct\" href=\"embassy_nrf/gpio/struct.Input.html\" title=\"struct embassy_nrf::gpio::Input\">Input</a>&lt;'d, T&gt;"]]]]);
-    if (window.register_implementors) {
-        window.register_implementors(implementors);
-    } else {
-        window.pending_implementors = implementors;
-    }
-})()
-//{"start":57,"fragment_lengths":[1373]}

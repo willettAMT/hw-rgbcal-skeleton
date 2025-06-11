@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["Fpca","Npriv","Spsel"],"fn":["read","write"],"struct":["Control"]};

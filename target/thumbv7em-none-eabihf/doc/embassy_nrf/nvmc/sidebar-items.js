@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"constant":["FLASH_SIZE","PAGE_SIZE"],"enum":["Error"],"struct":["Nvmc"]};

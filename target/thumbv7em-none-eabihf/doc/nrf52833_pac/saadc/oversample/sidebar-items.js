@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["OVERSAMPLE_A"],"struct":["OVERSAMPLE_SPEC","R","W"],"type":["OVERSAMPLE_R","OVERSAMPLE_W"]};

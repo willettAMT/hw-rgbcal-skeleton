@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"struct":["PACKETPTR_SPEC","R","W"],"type":["PTR_R","PTR_W"]};

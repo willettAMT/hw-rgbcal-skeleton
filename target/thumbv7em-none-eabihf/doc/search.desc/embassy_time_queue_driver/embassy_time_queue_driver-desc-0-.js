@@ -1,1 +1,0 @@
-searchState.loadedDescShard("embassy_time_queue_driver", 0, "embassy-time-queue-driver\nTimer queue\nSchedule the given waker to be woken at <code>at</code>.\nSchedules a waker in the queue to be awoken at moment <code>at</code>. …\nSet the TimerQueue implementation.")

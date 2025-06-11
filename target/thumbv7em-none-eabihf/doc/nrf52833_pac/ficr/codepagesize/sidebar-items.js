@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"struct":["CODEPAGESIZE_SPEC","R"],"type":["CODEPAGESIZE_R"]};

@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"mod":["a","b","led"],"struct":["PSEL"],"type":["A","B","LED"]};

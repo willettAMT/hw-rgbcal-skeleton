@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"macro":["bitfield","bitfield_bitrange","bitfield_debug","bitfield_fields"],"trait":["Bit","BitRange"]};

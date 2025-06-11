@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["READ_A","WRITE_A"],"struct":["PERM_SPEC","R","W"],"type":["READ_R","READ_W","WRITE_R","WRITE_W"]};

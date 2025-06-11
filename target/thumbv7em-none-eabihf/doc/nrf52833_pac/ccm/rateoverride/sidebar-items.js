@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["RATEOVERRIDE_A"],"struct":["R","RATEOVERRIDE_SPEC","W"],"type":["RATEOVERRIDE_R","RATEOVERRIDE_W"]};

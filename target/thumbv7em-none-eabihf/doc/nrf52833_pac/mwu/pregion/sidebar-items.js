@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"mod":["end","start","subs"],"struct":["PREGION"],"type":["END","START","SUBS"]};

@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["CPUFPBEN_A","CPUNIDEN_A"],"struct":["DEBUGCTRL_SPEC","R","W"],"type":["CPUFPBEN_R","CPUFPBEN_W","CPUNIDEN_R","CPUNIDEN_W"]};

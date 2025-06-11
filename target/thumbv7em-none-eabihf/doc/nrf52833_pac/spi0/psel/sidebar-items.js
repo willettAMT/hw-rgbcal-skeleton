@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"mod":["miso","mosi","sck"],"struct":["PSEL"],"type":["MISO","MOSI","SCK"]};

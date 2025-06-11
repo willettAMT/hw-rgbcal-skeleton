@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["MICSTATUS_A"],"struct":["MICSTATUS_SPEC","R"],"type":["MICSTATUS_R"]};

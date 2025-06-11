@@ -1,3 +1,0 @@
-cargo:rustc-link-search=/home/aaron/Documents/Repos/Classes/CS_rust/hw-rgbcal-skeleton/target/thumbv7em-none-eabihf/release/build/nrf52833-pac-1e31dda92539a40c/out
-cargo:rerun-if-changed=device.x
-cargo:rerun-if-changed=build.rs

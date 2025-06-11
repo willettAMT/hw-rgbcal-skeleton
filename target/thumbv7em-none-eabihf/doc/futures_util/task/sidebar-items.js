@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"fn":["noop_waker","noop_waker_ref"],"struct":["AtomicWaker","FutureObj","LocalFutureObj","SpawnError"],"trait":["LocalSpawn","LocalSpawnExt","Spawn","SpawnExt","UnsafeFutureObj"]};

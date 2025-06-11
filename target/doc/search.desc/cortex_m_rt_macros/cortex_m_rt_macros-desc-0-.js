@@ -1,1 +1,0 @@
-searchState.loadedDescShard("cortex_m_rt_macros", 0, "Internal implementation details of <code>cortex-m-rt</code>.")

@@ -1,1 +1,0 @@
-searchState.loadedDescShard("futures_channel", 0, "Asynchronous channels.")

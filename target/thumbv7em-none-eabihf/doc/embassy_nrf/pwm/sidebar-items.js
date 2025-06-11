@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["CounterMode","Error","Prescaler","SequenceLoad","SequenceMode","SingleSequenceMode","StartSequence"],"struct":["Config","Sequence","SequenceConfig","SequencePwm","Sequencer","SimplePwm","SingleSequencer"],"trait":["Instance"]};

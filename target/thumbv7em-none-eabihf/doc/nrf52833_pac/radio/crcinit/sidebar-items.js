@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"struct":["CRCINIT_SPEC","R","W"],"type":["CRCINIT_R","CRCINIT_W"]};

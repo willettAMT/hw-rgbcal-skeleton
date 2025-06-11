@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"attr":["main_cortex_m","main_riscv","main_std","main_wasm","task"]};

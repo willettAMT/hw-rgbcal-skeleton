@@ -1,6 +1,0 @@
-cargo:rustc-link-lib=static=cortex-m
-cargo:rustc-link-search=/home/aaron/Documents/Repos/Classes/CS_rust/hw-rgbcal-skeleton/target/thumbv7em-none-eabihf/debug/build/cortex-m-c1e6bba6f70e7b35/out
-cargo:rustc-cfg=cortex_m
-cargo:rustc-cfg=armv7m
-cargo:rustc-cfg=armv7em
-cargo:rustc-cfg=has_fpu

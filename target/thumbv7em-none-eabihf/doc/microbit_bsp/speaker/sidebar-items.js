@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["NamedPitch","Pitch"],"struct":["Note","PwmSpeaker"]};

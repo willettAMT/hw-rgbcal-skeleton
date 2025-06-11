@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["PROTECT_A"],"struct":["NFCPINS_SPEC","R","W"],"type":["PROTECT_R","PROTECT_W"]};

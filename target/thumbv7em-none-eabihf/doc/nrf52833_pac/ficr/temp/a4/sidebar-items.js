@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"struct":["A4_SPEC","R"],"type":["A_R"]};

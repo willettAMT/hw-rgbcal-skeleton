@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"struct":["R","TIFS_SPEC","W"],"type":["TIFS_R","TIFS_W"]};

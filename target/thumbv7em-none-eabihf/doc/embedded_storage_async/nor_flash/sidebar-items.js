@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["NorFlashErrorKind"],"trait":["ErrorType","MultiwriteNorFlash","NorFlash","NorFlashError","ReadNorFlash"]};

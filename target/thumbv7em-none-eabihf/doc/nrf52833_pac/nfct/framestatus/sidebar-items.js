@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"mod":["rx"],"struct":["FRAMESTATUS"],"type":["RX"]};

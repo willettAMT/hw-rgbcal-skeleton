@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"mod":["dis","en"],"struct":["TASKS_CHG"],"type":["DIS","EN"]};

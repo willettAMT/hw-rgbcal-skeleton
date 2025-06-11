@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["TASKS_FLUSHRX_AW"],"struct":["TASKS_FLUSHRX_SPEC","W"],"type":["TASKS_FLUSHRX_W"]};

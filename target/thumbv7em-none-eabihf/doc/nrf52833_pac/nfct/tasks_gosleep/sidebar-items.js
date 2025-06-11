@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["TASKS_GOSLEEP_AW"],"struct":["TASKS_GOSLEEP_SPEC","W"],"type":["TASKS_GOSLEEP_W"]};

@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["MCKFREQ_A"],"struct":["MCKFREQ_SPEC","R","W"],"type":["MCKFREQ_R","MCKFREQ_W"]};

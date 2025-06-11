@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["TASKS_TRIGGER_AW"],"struct":["TASKS_TRIGGER_SPEC","W"],"type":["TASKS_TRIGGER_W"]};

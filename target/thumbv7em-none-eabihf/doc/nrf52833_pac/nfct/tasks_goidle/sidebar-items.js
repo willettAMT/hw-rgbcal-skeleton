@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["TASKS_GOIDLE_AW"],"struct":["TASKS_GOIDLE_SPEC","W"],"type":["TASKS_GOIDLE_W"]};

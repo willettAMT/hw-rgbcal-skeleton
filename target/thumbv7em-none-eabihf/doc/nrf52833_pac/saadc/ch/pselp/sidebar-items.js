@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["PSELP_A"],"struct":["PSELP_SPEC","R","W"],"type":["PSELP_R","PSELP_W"]};

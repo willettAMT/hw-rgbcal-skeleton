@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"struct":["ERASEPAGEPARTIALCFG_SPEC","R","W"],"type":["DURATION_R","DURATION_W"]};

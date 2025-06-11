@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["TASKS_LFCLKSTART_AW"],"struct":["TASKS_LFCLKSTART_SPEC","W"],"type":["TASKS_LFCLKSTART_W"]};

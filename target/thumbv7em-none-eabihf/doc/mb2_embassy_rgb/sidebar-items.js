@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"constant":["LEVELS"],"fn":["__cortex_m_rt_main","__embassy_main","__make_static","get_frame_rate","get_rgb_levels","set_frame_rate","set_rgb_levels"],"mod":["knob","rgb","ui"],"static":["FRAME_RATE","RGB_LEVELS"],"struct":["Knob","Rgb","Ui"],"type":["Adc"]};

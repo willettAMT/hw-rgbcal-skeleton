@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["RAM_A"],"struct":["R","RAM_SPEC"],"type":["RAM_R"]};

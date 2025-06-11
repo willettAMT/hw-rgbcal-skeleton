@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"struct":["MHRMATCHMAS_SPEC","R","W"],"type":["MHRMATCHMAS_R","MHRMATCHMAS_W"]};

@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"struct":["DynImmediatePublisher","DynPublisher","ImmediatePub","ImmediatePublisher","Pub","Publisher","PublisherWaitFuture"]};

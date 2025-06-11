@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"mod":["end","start"],"struct":["REGION"],"type":["END","START"]};

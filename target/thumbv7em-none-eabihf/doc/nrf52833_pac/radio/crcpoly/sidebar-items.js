@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"struct":["CRCPOLY_SPEC","R","W"],"type":["CRCPOLY_R","CRCPOLY_W"]};

@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"mod":["cts","rts","rxd","txd"],"struct":["PSEL"],"type":["CTS","RTS","RXD","TXD"]};

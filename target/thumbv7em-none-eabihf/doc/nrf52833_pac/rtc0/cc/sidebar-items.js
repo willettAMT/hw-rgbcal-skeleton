@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"struct":["CC_SPEC","R","W"],"type":["COMPARE_R","COMPARE_W"]};

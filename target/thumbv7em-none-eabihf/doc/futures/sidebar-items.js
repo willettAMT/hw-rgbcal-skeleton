@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"macro":["pin_mut","ready"],"mod":["future","never","prelude","sink","stream","task"]};

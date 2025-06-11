@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"struct":["DAI_SPEC","R"],"type":["DAI_R"]};

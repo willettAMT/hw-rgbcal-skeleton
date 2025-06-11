@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["TASKS_STOPTX_AW"],"struct":["TASKS_STOPTX_SPEC","W"],"type":["TASKS_STOPTX_W"]};

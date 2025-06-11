@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"struct":["ERASEPCR0_SPEC","W"],"type":["ERASEPCR0_W"]};

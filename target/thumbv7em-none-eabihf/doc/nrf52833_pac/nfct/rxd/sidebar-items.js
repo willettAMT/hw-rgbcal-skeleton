@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"mod":["amount","frameconfig"],"struct":["RXD"],"type":["AMOUNT","FRAMECONFIG"]};

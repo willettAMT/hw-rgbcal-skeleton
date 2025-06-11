@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"struct":["AnyConfigurableChannel","AnyGroup","AnyStaticChannel","Event","Ppi","PpiGroup","Task"],"trait":["Channel","ConfigurableChannel","Group","StaticChannel"]};

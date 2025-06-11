@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["VALRDY_A","VALRDY_AW"],"struct":["INTENSET_SPEC","R","W"],"type":["VALRDY_R","VALRDY_W"]};

@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["DBFEN_A"],"struct":["DBFEN_SPEC","R","W"],"type":["DBFEN_R","DBFEN_W"]};

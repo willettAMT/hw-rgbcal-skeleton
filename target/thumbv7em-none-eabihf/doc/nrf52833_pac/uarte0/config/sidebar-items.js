@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["HWFC_A","PARITYTYPE_A","PARITY_A","STOP_A"],"struct":["CONFIG_SPEC","R","W"],"type":["HWFC_R","HWFC_W","PARITYTYPE_R","PARITYTYPE_W","PARITY_R","PARITY_W","STOP_R","STOP_W"]};
