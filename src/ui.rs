@@ -1,17 +1,32 @@
+//! # User Interface Module
+//!
+//! This module handles user input processing using a knob (potentiometer) and
+//! two buttons to control RGB LED parameters and frame rate.
+//!
+//! ## Control Scheme
+//!
+//! - **No buttons**: Knob controls frame rate (10-160 FPS)
+//! - **Button A**: Knob controls blue LED intensity (0-15)
+//! - **Button B**: Knob controls green LED intensity (0-15)  
+//! - **Both buttons**: Knob controls red LED intensity (0-15)
 use crate::*;
 
-/// Represents which parameter the knob is currently controlling
+/// Represents which parameter the knob is currently controlling.
 #[derive(Debug, Clone, Copy, PartialEq)]
 enum ControlParameter {
-    FrameRate, // No buttons
-    Blue,      // A button
-    Green,     // B button
-    Red,       // A+B buttons
+    /// Frame rate control (no buttons pressed)
+    FrameRate,
+    /// Blue LED intensity (button A pressed)
+    Blue,
+    /// Green LED intensity (button B pressed)
+    Green,
+    /// Red LED intensity (both buttons pressed)
+    Red,
 }
 
 /// Internal state for th e UI control system.
 ///
-/// This struct maintains the current values for all controallbe parameters.
+/// This struct maintains the current values for all controllable parameters.
 /// It serves as a local cache to minimize shared state access and provides
 /// the source of truth for UI display.
 ///
@@ -36,9 +51,9 @@ struct UiState {
     /// - Index 1: Green intensity (0 = off, 15 = maximum)
     /// - Index 2: Blue intensity (0 = off, 15 = maximum)
     levels: [u32; 3],
-    /// Display refresh rate in frames per second 910-160 FPS).
+    /// Display refresh rate in frames per second (10-160 FPS).
     ///
-    /// Controls how freqwuently the RGB LEDs are update. Higher values
+    /// Controls how frequently the RGB LEDs are update. Higher values
     /// provide smoother visual transitions but increase power consumption.
     frame_rate: u64,
 }
@@ -84,7 +99,10 @@ impl Default for UiState {
         }
     }
 }
-
+/// User interface controller that processes knob and button inputs.
+///
+/// Manages the mapping between button states and controllable parameters,
+/// reads knob values, and updates shared state for the RGB controller.
 pub struct Ui {
     knob: Knob,
     button_a: Button,
@@ -94,6 +112,10 @@ pub struct Ui {
 }
 
 impl Ui {
+    /// User interface controller that processes knob and button inputs.
+    ///
+    /// Manages the mapping between button states and controllable parameters,
+    /// reads knob values, and updates shared state for the RGB controller.
     pub fn new(knob: Knob, button_a: Button, button_b: Button) -> Self {
         Self {
             knob,
@@ -103,7 +125,14 @@ impl Ui {
             current_parameter: ControlParameter::FrameRate,
         }
     }
-    /// Read the current button state and determine which parameter to control
+    /// Reads button state and determines which parameter to control.
+    ///
+    /// # Returns
+    /// The active control parameter based on button combination:
+    /// - No buttons: Frame rate
+    /// - A only: Blue LED
+    /// - B only: Green LED  
+    /// - A + B: Red LED
     fn read_button_state(&mut self) -> ControlParameter {
         let a_pressed = self.button_a.is_low();
         let b_pressed = self.button_b.is_low();
@@ -115,7 +144,16 @@ impl Ui {
             (true, true) => ControlParameter::Red,         // Both A+B buttons
         }
     }
-    /// Map knob value (0-15) to appropriate parameter value
+    /// Maps knob value (0-15) to appropriate parameter range.
+    ///
+    /// # Arguments
+    /// * `knob_value` - Raw knob reading (0-15)
+    /// * `parameter` - Target parameter to map to
+    ///
+    /// # Returns
+    /// Mapped value in the appropriate range:
+    /// - Frame rate: 10-160 FPS
+    /// - RGB: 0-15 (unchanged)
     fn map_knob_value(&self, knob_value: u32, parameter: ControlParameter) -> u32 {
         match parameter {
             ControlParameter::FrameRate => 10 + (knob_value * 10),
@@ -127,15 +165,7 @@ impl Ui {
     /// This is the primary entry point for the UI system. It runs continuously,
     /// processing button and knob inputs, managing parameter selection, and
     /// synchronizing state with the RGB display system.
-    ///
-    /// # Operation Flow
-    ///
-    /// 1. **Parameter Detection**: Check button state to determine active parameter
-    /// 2. **Value Mapping**: Read knob input and map to appropriate value range
-    /// 3. **Change Detection**: Only update state when values actually change
-    /// 4. **State Synchronization**: Update shared state for RGB display system
-    /// 5. **User Feedback**: Display current values and active parameter
-    ///
+
     /// # Value Ranges
     ///
     /// - **RGB Parameters**: 0-15 (mapped from knob input)
