@@ -1,6 +1,6 @@
 $ mkdir -p "/home/aaron/Documents/Repos/Classes/CS_rust/hw-rgbcal-skeleton/target/thumbv7em-none-eabihf/debug/build/az-e07ae12361080b7c/out/try_track_caller"
 $ cd "/home/aaron/Documents/Repos/Classes/CS_rust/hw-rgbcal-skeleton/target/thumbv7em-none-eabihf/debug/build/az-e07ae12361080b7c/out/try_track_caller"
 $ printf '%s' "// try_tra"... > "/home/aaron/Documents/Repos/Classes/CS_rust/hw-rgbcal-skeleton/target/thumbv7em-none-eabihf/debug/build/az-e07ae12361080b7c/out/try_track_caller/try_track_caller.rs"
-$ cd "/home/aaron/Documents/Repos/Classes/CS_rust/hw-rgbcal-skeleton/target/thumbv7em-none-eabihf/debug/build/az-e07ae12361080b7c/out/try_track_caller" && "rustc" "try_track_caller.rs" "--emit=dep-info,metadata" >& /dev/null
+$ cd "/home/aaron/Documents/Repos/Classes/CS_rust/hw-rgbcal-skeleton/target/thumbv7em-none-eabihf/debug/build/az-e07ae12361080b7c/out/try_track_caller" && "/home/aaron/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/bin/rustc" "try_track_caller.rs" "--emit=dep-info,metadata" >& /dev/null
 cargo:rustc-cfg=track_caller
 $ rm -r "/home/aaron/Documents/Repos/Classes/CS_rust/hw-rgbcal-skeleton/target/thumbv7em-none-eabihf/debug/build/az-e07ae12361080b7c/out/try_track_caller"

@@ -1,106 +1,43 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="RGB LED controller with dynamic frame rate and PWM intensity control."><title>Rgb in mb2_embassy_rgb::rgb - Rust</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-46132b98.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="mb2_embassy_rgb" data-themes="" data-resource-suffix="" data-rustdoc-version="1.85.1 (4eb161250 2025-03-15)" data-channel="1.85.1" data-search-js="search-75f5ac3e.js" data-settings-js="settings-0f613d39.js" ><script src="../../static.files/storage-59e33391.js"></script><script defer src="sidebar-items.js"></script><script defer src="../../static.files/main-5f194d8c.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-893ab5e7.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-6580c154.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-044be391.svg"></head><body class="rustdoc struct"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle" title="show sidebar"></button></nav><nav class="sidebar"><div class="sidebar-crate"><h2><a href="../../mb2_embassy_rgb/index.html">mb2_<wbr>embassy_<wbr>rgb</a><span class="version">0.1.0</span></h2></div><div class="sidebar-elems"><section id="rustdoc-toc"><h2 class="location"><a href="#">Rgb</a></h2><h3><a href="#">Sections</a></h3><ul class="block top-toc"><li><a href="#pwm-algorithm" title="PWM Algorithm">PWM Algorithm</a></li><li><a href="#state-management" title="State Management">State Management</a></li><li><a href="#performance-characteristics" title="Performance Characteristics">Performance Characteristics</a></li></ul><h3><a href="#fields">Fields</a></h3><ul class="block structfield"><li><a href="#structfield.current_frame_rate" title="current_frame_rate">current_frame_rate</a></li><li><a href="#structfield.levels" title="levels">levels</a></li><li><a href="#structfield.rgb" title="rgb">rgb</a></li><li><a href="#structfield.tick_time" title="tick_time">tick_time</a></li></ul><h3><a href="#implementations">Methods</a></h3><ul class="block method"><li><a href="#method.frame_tick_time" title="frame_tick_time">frame_tick_time</a></li><li><a href="#method.new" title="new">new</a></li><li><a href="#method.run" title="run">run</a></li><li><a href="#method.step" title="step">step</a></li></ul><h3><a href="#synthetic-implementations">Auto Trait Implementations</a></h3><ul class="block synthetic-implementation"><li><a href="#impl-UnwindSafe-for-Rgb" title="!UnwindSafe">!UnwindSafe</a></li><li><a href="#impl-Freeze-for-Rgb" title="Freeze">Freeze</a></li><li><a href="#impl-RefUnwindSafe-for-Rgb" title="RefUnwindSafe">RefUnwindSafe</a></li><li><a href="#impl-Send-for-Rgb" title="Send">Send</a></li><li><a href="#impl-Sync-for-Rgb" title="Sync">Sync</a></li><li><a href="#impl-Unpin-for-Rgb" title="Unpin">Unpin</a></li></ul><h3><a href="#blanket-implementations">Blanket Implementations</a></h3><ul class="block blanket-implementation"><li><a href="#impl-Any-for-T" title="Any">Any</a></li><li><a href="#impl-Az-for-T" title="Az">Az</a></li><li><a href="#impl-Borrow%3CT%3E-for-T" title="Borrow&#60;T&#62;">Borrow&#60;T&#62;</a></li><li><a href="#impl-BorrowMut%3CT%3E-for-T" title="BorrowMut&#60;T&#62;">BorrowMut&#60;T&#62;</a></li><li><a href="#impl-CastFrom%3CSrc%3E-for-Dst" title="CastFrom&#60;Src&#62;">CastFrom&#60;Src&#62;</a></li><li><a href="#impl-CheckedAs-for-T" title="CheckedAs">CheckedAs</a></li><li><a href="#impl-CheckedCastFrom%3CSrc%3E-for-Dst" title="CheckedCastFrom&#60;Src&#62;">CheckedCastFrom&#60;Src&#62;</a></li><li><a href="#impl-From%3CT%3E-for-T" title="From&#60;T&#62;">From&#60;T&#62;</a></li><li><a href="#impl-Into%3CU%3E-for-T" title="Into&#60;U&#62;">Into&#60;U&#62;</a></li><li><a href="#impl-LosslessTryInto%3CDst%3E-for-Src" title="LosslessTryInto&#60;Dst&#62;">LosslessTryInto&#60;Dst&#62;</a></li><li><a href="#impl-LossyInto%3CDst%3E-for-Src" title="LossyInto&#60;Dst&#62;">LossyInto&#60;Dst&#62;</a></li><li><a href="#impl-OverflowingAs-for-T" title="OverflowingAs">OverflowingAs</a></li><li><a href="#impl-OverflowingCastFrom%3CSrc%3E-for-Dst" title="OverflowingCastFrom&#60;Src&#62;">OverflowingCastFrom&#60;Src&#62;</a></li><li><a href="#impl-Same-for-T" title="Same">Same</a></li><li><a href="#impl-SaturatingAs-for-T" title="SaturatingAs">SaturatingAs</a></li><li><a href="#impl-SaturatingCastFrom%3CSrc%3E-for-Dst" title="SaturatingCastFrom&#60;Src&#62;">SaturatingCastFrom&#60;Src&#62;</a></li><li><a href="#impl-TryFrom%3CU%3E-for-T" title="TryFrom&#60;U&#62;">TryFrom&#60;U&#62;</a></li><li><a href="#impl-TryInto%3CU%3E-for-T" title="TryInto&#60;U&#62;">TryInto&#60;U&#62;</a></li><li><a href="#impl-UnwrappedAs-for-T" title="UnwrappedAs">UnwrappedAs</a></li><li><a href="#impl-UnwrappedCastFrom%3CSrc%3E-for-Dst" title="UnwrappedCastFrom&#60;Src&#62;">UnwrappedCastFrom&#60;Src&#62;</a></li><li><a href="#impl-WrappingAs-for-T" title="WrappingAs">WrappingAs</a></li><li><a href="#impl-WrappingCastFrom%3CSrc%3E-for-Dst" title="WrappingCastFrom&#60;Src&#62;">WrappingCastFrom&#60;Src&#62;</a></li></ul></section><div id="rustdoc-modnav"><h2><a href="index.html">In mb2_<wbr>embassy_<wbr>rgb::<wbr>rgb</a></h2></div></div></nav><div class="sidebar-resizer"></div><main><div class="width-limiter"><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><span class="rustdoc-breadcrumbs"><a href="../index.html">mb2_embassy_rgb</a>::<wbr><a href="index.html">rgb</a></span><h1>Struct <span class="struct">Rgb</span><button id="copy-path" title="Copy item path to clipboard">Copy item path</button></h1><rustdoc-toolbar></rustdoc-toolbar><span class="sub-heading"><a class="src" href="../../src/mb2_embassy_rgb/rgb.rs.html#83-107">Source</a> </span></div><pre class="rust item-decl"><code>pub struct Rgb {
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="RGB LED controller using software PWM."><title>Rgb in mb2_embassy_rgb::rgb - Rust</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-46132b98.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="mb2_embassy_rgb" data-themes="" data-resource-suffix="" data-rustdoc-version="1.85.1 (4eb161250 2025-03-15)" data-channel="1.85.1" data-search-js="search-75f5ac3e.js" data-settings-js="settings-0f613d39.js" ><script src="../../static.files/storage-59e33391.js"></script><script defer src="sidebar-items.js"></script><script defer src="../../static.files/main-5f194d8c.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-893ab5e7.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-6580c154.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-044be391.svg"></head><body class="rustdoc struct"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle" title="show sidebar"></button></nav><nav class="sidebar"><div class="sidebar-crate"><h2><a href="../../mb2_embassy_rgb/index.html">mb2_<wbr>embassy_<wbr>rgb</a><span class="version">0.1.0</span></h2></div><div class="sidebar-elems"><section id="rustdoc-toc"><h2 class="location"><a href="#">Rgb</a></h2><h3><a href="#fields">Fields</a></h3><ul class="block structfield"><li><a href="#structfield.current_frame_rate" title="current_frame_rate">current_frame_rate</a></li><li><a href="#structfield.levels" title="levels">levels</a></li><li><a href="#structfield.rgb" title="rgb">rgb</a></li><li><a href="#structfield.tick_time" title="tick_time">tick_time</a></li></ul><h3><a href="#implementations">Methods</a></h3><ul class="block method"><li><a href="#method.frame_tick_time" title="frame_tick_time">frame_tick_time</a></li><li><a href="#method.new" title="new">new</a></li><li><a href="#method.run" title="run">run</a></li><li><a href="#method.step" title="step">step</a></li></ul><h3><a href="#synthetic-implementations">Auto Trait Implementations</a></h3><ul class="block synthetic-implementation"><li><a href="#impl-UnwindSafe-for-Rgb" title="!UnwindSafe">!UnwindSafe</a></li><li><a href="#impl-Freeze-for-Rgb" title="Freeze">Freeze</a></li><li><a href="#impl-RefUnwindSafe-for-Rgb" title="RefUnwindSafe">RefUnwindSafe</a></li><li><a href="#impl-Send-for-Rgb" title="Send">Send</a></li><li><a href="#impl-Sync-for-Rgb" title="Sync">Sync</a></li><li><a href="#impl-Unpin-for-Rgb" title="Unpin">Unpin</a></li></ul><h3><a href="#blanket-implementations">Blanket Implementations</a></h3><ul class="block blanket-implementation"><li><a href="#impl-Any-for-T" title="Any">Any</a></li><li><a href="#impl-Az-for-T" title="Az">Az</a></li><li><a href="#impl-Borrow%3CT%3E-for-T" title="Borrow&#60;T&#62;">Borrow&#60;T&#62;</a></li><li><a href="#impl-BorrowMut%3CT%3E-for-T" title="BorrowMut&#60;T&#62;">BorrowMut&#60;T&#62;</a></li><li><a href="#impl-CastFrom%3CSrc%3E-for-Dst" title="CastFrom&#60;Src&#62;">CastFrom&#60;Src&#62;</a></li><li><a href="#impl-CheckedAs-for-T" title="CheckedAs">CheckedAs</a></li><li><a href="#impl-CheckedCastFrom%3CSrc%3E-for-Dst" title="CheckedCastFrom&#60;Src&#62;">CheckedCastFrom&#60;Src&#62;</a></li><li><a href="#impl-From%3CT%3E-for-T" title="From&#60;T&#62;">From&#60;T&#62;</a></li><li><a href="#impl-Into%3CU%3E-for-T" title="Into&#60;U&#62;">Into&#60;U&#62;</a></li><li><a href="#impl-LosslessTryInto%3CDst%3E-for-Src" title="LosslessTryInto&#60;Dst&#62;">LosslessTryInto&#60;Dst&#62;</a></li><li><a href="#impl-LossyInto%3CDst%3E-for-Src" title="LossyInto&#60;Dst&#62;">LossyInto&#60;Dst&#62;</a></li><li><a href="#impl-OverflowingAs-for-T" title="OverflowingAs">OverflowingAs</a></li><li><a href="#impl-OverflowingCastFrom%3CSrc%3E-for-Dst" title="OverflowingCastFrom&#60;Src&#62;">OverflowingCastFrom&#60;Src&#62;</a></li><li><a href="#impl-Same-for-T" title="Same">Same</a></li><li><a href="#impl-SaturatingAs-for-T" title="SaturatingAs">SaturatingAs</a></li><li><a href="#impl-SaturatingCastFrom%3CSrc%3E-for-Dst" title="SaturatingCastFrom&#60;Src&#62;">SaturatingCastFrom&#60;Src&#62;</a></li><li><a href="#impl-TryFrom%3CU%3E-for-T" title="TryFrom&#60;U&#62;">TryFrom&#60;U&#62;</a></li><li><a href="#impl-TryInto%3CU%3E-for-T" title="TryInto&#60;U&#62;">TryInto&#60;U&#62;</a></li><li><a href="#impl-UnwrappedAs-for-T" title="UnwrappedAs">UnwrappedAs</a></li><li><a href="#impl-UnwrappedCastFrom%3CSrc%3E-for-Dst" title="UnwrappedCastFrom&#60;Src&#62;">UnwrappedCastFrom&#60;Src&#62;</a></li><li><a href="#impl-WrappingAs-for-T" title="WrappingAs">WrappingAs</a></li><li><a href="#impl-WrappingCastFrom%3CSrc%3E-for-Dst" title="WrappingCastFrom&#60;Src&#62;">WrappingCastFrom&#60;Src&#62;</a></li></ul></section><div id="rustdoc-modnav"><h2><a href="index.html">In mb2_<wbr>embassy_<wbr>rgb::<wbr>rgb</a></h2></div></div></nav><div class="sidebar-resizer"></div><main><div class="width-limiter"><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><span class="rustdoc-breadcrumbs"><a href="../index.html">mb2_embassy_rgb</a>::<wbr><a href="index.html">rgb</a></span><h1>Struct <span class="struct">Rgb</span><button id="copy-path" title="Copy item path to clipboard">Copy item path</button></h1><rustdoc-toolbar></rustdoc-toolbar><span class="sub-heading"><a class="src" href="../../src/mb2_embassy_rgb/rgb.rs.html#61-70">Source</a> </span></div><pre class="rust item-decl"><code>pub struct Rgb {
     rgb: [<a class="struct" href="../../embassy_nrf/gpio/struct.Output.html" title="struct embassy_nrf::gpio::Output">Output</a>&lt;'static, <a class="struct" href="../../embassy_nrf/gpio/struct.AnyPin.html" title="struct embassy_nrf::gpio::AnyPin">AnyPin</a>&gt;; <a class="primitive" href="https://doc.rust-lang.org/1.85.1/core/primitive.array.html">3</a>],
     levels: [<a class="primitive" href="https://doc.rust-lang.org/1.85.1/core/primitive.u32.html">u32</a>; <a class="primitive" href="https://doc.rust-lang.org/1.85.1/core/primitive.array.html">3</a>],
     tick_time: <a class="primitive" href="https://doc.rust-lang.org/1.85.1/core/primitive.u64.html">u64</a>,
     current_frame_rate: <a class="primitive" href="https://doc.rust-lang.org/1.85.1/core/primitive.u64.html">u64</a>,
-}</code></pre><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>RGB LED controller with dynamic frame rate and PWM intensity control.</p>
-<p>This struct manages software-based PWM for three RGB LEDs with real-time
-frame rate adjustment. It maintains local state to minimize shared memory
-access and provides smooth LED control with microsecond timing precision.</p>
-<h2 id="pwm-algorithm"><a class="doc-anchor" href="#pwm-algorithm">§</a>PWM Algorithm</h2>
-<p>For each LED in each frame:</p>
-<ol>
-<li>Turn LED on for <code>(intensity * tick_time)</code> microseconds</li>
-<li>Turn LED off for <code>((LEVELS - intensity) * tick_time)</code> microseconds</li>
-<li>Move to next LED</li>
-<li>Repeat cycle</li>
-</ol>
-<h2 id="state-management"><a class="doc-anchor" href="#state-management">§</a>State Management</h2>
-<ul>
-<li><strong>RGB Levels</strong>: Cached from shared state each frame to minimize lock contention</li>
-<li><strong>Frame Rate</strong>: Monitored for changes and recalculates timing when needed</li>
-<li><strong>Tick Time</strong>: Pre-calculated timing value for efficient PWM execution</li>
-</ul>
-<h2 id="performance-characteristics"><a class="doc-anchor" href="#performance-characteristics">§</a>Performance Characteristics</h2>
-<ul>
-<li><strong>Memory</strong>: Minimal heap usage with stack-based operation</li>
-<li><strong>CPU</strong>: Efficient with change-detection for frame rate updates</li>
-<li><strong>Timing</strong>: Microsecond precision using Embassy async timers</li>
-<li><strong>Responsiveness</strong>: Real-time response to RGB and frame rate changes</li>
-</ul>
-</div></details><h2 id="fields" class="fields section-header">Fields<a href="#fields" class="anchor">§</a></h2><span id="structfield.rgb" class="structfield section-header"><a href="#structfield.rgb" class="anchor field">§</a><code>rgb: [<a class="struct" href="../../embassy_nrf/gpio/struct.Output.html" title="struct embassy_nrf::gpio::Output">Output</a>&lt;'static, <a class="struct" href="../../embassy_nrf/gpio/struct.AnyPin.html" title="struct embassy_nrf::gpio::AnyPin">AnyPin</a>&gt;; <a class="primitive" href="https://doc.rust-lang.org/1.85.1/core/primitive.array.html">3</a>]</code></span><div class="docblock"><p>GPIO pins controlling the RGB LEDs [red, green, blue].</p>
-<p>Each pin is configured as a standard output and is directly controlled
-for PWM generation. Pin state changes with microsecond timing precision.</p>
-</div><span id="structfield.levels" class="structfield section-header"><a href="#structfield.levels" class="anchor field">§</a><code>levels: [<a class="primitive" href="https://doc.rust-lang.org/1.85.1/core/primitive.u32.html">u32</a>; <a class="primitive" href="https://doc.rust-lang.org/1.85.1/core/primitive.array.html">3</a>]</code></span><div class="docblock"><p>Cached RGB intensity levels to minimize shared state access.</p>
-<p>Local shadow copy of the RGB levels [red, green, blue] with values 0-15.
-Updated each frame from shared state to reduce lock contention while
-maintaining real-time responsiveness to UI changes.,</p>
-</div><span id="structfield.tick_time" class="structfield section-header"><a href="#structfield.tick_time" class="anchor field">§</a><code>tick_time: <a class="primitive" href="https://doc.rust-lang.org/1.85.1/core/primitive.u64.html">u64</a></code></span><div class="docblock"><p>Pre-calculated timing value for PWM generation (in microseconds).</p>
-<p>Determines the duration of each PWM time slice. Calculated from the
-current frame rate and recalculated whenever frame rate changes.
-Formula: <code>1_000_000 / (3 * frame_rate * LEVELS)</code></p>
-</div><span id="structfield.current_frame_rate" class="structfield section-header"><a href="#structfield.current_frame_rate" class="anchor field">§</a><code>current_frame_rate: <a class="primitive" href="https://doc.rust-lang.org/1.85.1/core/primitive.u64.html">u64</a></code></span><div class="docblock"><p>Current frame rate for change detection and dynamic updates.</p>
-<p>Tracks the frame rate to detect changes and trigger tick_time
-recalculation. Only updates when frame rate actually changes,
-maintaining efficiency during stable operation.</p>
-</div><h2 id="implementations" class="section-header">Implementations<a href="#implementations" class="anchor">§</a></h2><div id="implementations-list"><details class="toggle implementors-toggle" open><summary><section id="impl-Rgb" class="impl"><a class="src rightside" href="../../src/mb2_embassy_rgb/rgb.rs.html#109-297">Source</a><a href="#impl-Rgb" class="anchor">§</a><h3 class="code-header">impl <a class="struct" href="../struct.Rgb.html" title="struct mb2_embassy_rgb::Rgb">Rgb</a></h3></section></summary><div class="impl-items"><details class="toggle method-toggle" open><summary><section id="method.frame_tick_time" class="method"><a class="src rightside" href="../../src/mb2_embassy_rgb/rgb.rs.html#143-145">Source</a><h4 class="code-header">fn <a href="#method.frame_tick_time" class="fn">frame_tick_time</a>(frame_rate: <a class="primitive" href="https://doc.rust-lang.org/1.85.1/core/primitive.u64.html">u64</a>) -&gt; <a class="primitive" href="https://doc.rust-lang.org/1.85.1/core/primitive.u64.html">u64</a></h4></section></summary><div class="docblock"><p>Calculates the PWM tick time in microseconds for a given frame rate.</p>
-<p>This is the core timing calculation that determines how long each PWM
-time slice should last. The calculation ensures that all RGB LEDs
-complete their full PWM cycles within the target frame rate.</p>
-<h5 id="formula"><a class="doc-anchor" href="#formula">§</a>Formula</h5><div class="example-wrap"><pre class="language-text"><code>tick_time = 1_000_000 / (3 * frame_rate * LEVELS)</code></pre></div><h5 id="parameters"><a class="doc-anchor" href="#parameters">§</a>Parameters</h5>
-<ul>
-<li><code>frame_rate</code> - Target refresh rate in frames per second (10-160)</li>
-</ul>
-<h5 id="returns"><a class="doc-anchor" href="#returns">§</a>Returns</h5>
-<p>Tick time in microseconds for PWM time slicing.</p>
-<h5 id="examples"><a class="doc-anchor" href="#examples">§</a>Examples</h5>
-<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">let </span>tick_time = Rgb::frame_tick_time(<span class="number">60</span>); <span class="comment">// For 60 FPS
-// With LEVELS=16: tick_time = 1_000_000 / (3 * 60 * 16) = ~347 μs</span></code></pre></div>
-<h5 id="timing-breakdown"><a class="doc-anchor" href="#timing-breakdown">§</a>Timing Breakdown</h5>
-<p>For 60 FPS with 16 intensity levels:</p>
-<ul>
-<li>Total frame time: 16.67ms (1000/60)</li>
-<li>Per-LED time: 5.56ms (16.67/3)</li>
-<li>Per-level time: 347μs (5.56/16)</li>
-</ul>
-</div></details><details class="toggle method-toggle" open><summary><section id="method.new" class="method"><a class="src rightside" href="../../src/mb2_embassy_rgb/rgb.rs.html#179-187">Source</a><h4 class="code-header">pub fn <a href="#method.new" class="fn">new</a>(rgb: [<a class="struct" href="../../embassy_nrf/gpio/struct.Output.html" title="struct embassy_nrf::gpio::Output">Output</a>&lt;'static, <a class="struct" href="../../embassy_nrf/gpio/struct.AnyPin.html" title="struct embassy_nrf::gpio::AnyPin">AnyPin</a>&gt;; <a class="primitive" href="https://doc.rust-lang.org/1.85.1/core/primitive.array.html">3</a>], frame_rate: <a class="primitive" href="https://doc.rust-lang.org/1.85.1/core/primitive.u64.html">u64</a>) -&gt; Self</h4></section></summary><div class="docblock"><p>Creates a new RGB controller instance with specified pins and frame rate.</p>
-<p>Initializes the RGB control system with the provided GPIO pins and
-calculates initial PWM timing based on the specified frame rate.</p>
+}</code></pre><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>RGB LED controller using software PWM.</p>
+<p>Manages three LEDs with individual intensity control and configurable
+frame rate. Reads RGB levels and frame rate from shared state.</p>
+</div></details><h2 id="fields" class="fields section-header">Fields<a href="#fields" class="anchor">§</a></h2><span id="structfield.rgb" class="structfield section-header"><a href="#structfield.rgb" class="anchor field">§</a><code>rgb: [<a class="struct" href="../../embassy_nrf/gpio/struct.Output.html" title="struct embassy_nrf::gpio::Output">Output</a>&lt;'static, <a class="struct" href="../../embassy_nrf/gpio/struct.AnyPin.html" title="struct embassy_nrf::gpio::AnyPin">AnyPin</a>&gt;; <a class="primitive" href="https://doc.rust-lang.org/1.85.1/core/primitive.array.html">3</a>]</code></span><div class="docblock"><p>GPIO pins for RGB LEDs [red, green, blue].</p>
+</div><span id="structfield.levels" class="structfield section-header"><a href="#structfield.levels" class="anchor field">§</a><code>levels: [<a class="primitive" href="https://doc.rust-lang.org/1.85.1/core/primitive.u32.html">u32</a>; <a class="primitive" href="https://doc.rust-lang.org/1.85.1/core/primitive.array.html">3</a>]</code></span><div class="docblock"><p>Cached RGB intensity levels (0 to <a href="../constant.LEVELS.html" title="constant mb2_embassy_rgb::LEVELS"><code>LEVELS</code></a>-1).</p>
+</div><span id="structfield.tick_time" class="structfield section-header"><a href="#structfield.tick_time" class="anchor field">§</a><code>tick_time: <a class="primitive" href="https://doc.rust-lang.org/1.85.1/core/primitive.u64.html">u64</a></code></span><div class="docblock"><p>PWM timing interval in microseconds.</p>
+</div><span id="structfield.current_frame_rate" class="structfield section-header"><a href="#structfield.current_frame_rate" class="anchor field">§</a><code>current_frame_rate: <a class="primitive" href="https://doc.rust-lang.org/1.85.1/core/primitive.u64.html">u64</a></code></span><div class="docblock"><p>Current frame rate for change detection.</p>
+</div><h2 id="implementations" class="section-header">Implementations<a href="#implementations" class="anchor">§</a></h2><div id="implementations-list"><details class="toggle implementors-toggle" open><summary><section id="impl-Rgb" class="impl"><a class="src rightside" href="../../src/mb2_embassy_rgb/rgb.rs.html#72-189">Source</a><a href="#impl-Rgb" class="anchor">§</a><h3 class="code-header">impl <a class="struct" href="../struct.Rgb.html" title="struct mb2_embassy_rgb::Rgb">Rgb</a></h3></section></summary><div class="impl-items"><details class="toggle method-toggle" open><summary><section id="method.frame_tick_time" class="method"><a class="src rightside" href="../../src/mb2_embassy_rgb/rgb.rs.html#85-87">Source</a><h4 class="code-header">fn <a href="#method.frame_tick_time" class="fn">frame_tick_time</a>(frame_rate: <a class="primitive" href="https://doc.rust-lang.org/1.85.1/core/primitive.u64.html">u64</a>) -&gt; <a class="primitive" href="https://doc.rust-lang.org/1.85.1/core/primitive.u64.html">u64</a></h4></section></summary><div class="docblock"><p>Calculates PWM timing for the given frame rate.</p>
+<h5 id="formula"><a class="doc-anchor" href="#formula">§</a>Formula</h5>
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code>tick_time = <span class="number">1_000_000 </span>/ (<span class="number">3 </span>* frame_rate * LEVELS)</code></pre></div>
 <h5 id="arguments"><a class="doc-anchor" href="#arguments">§</a>Arguments</h5>
 <ul>
-<li><code>rgb</code> - Array of three GPIO output pins [red, green, blue]</li>
-<li><code>frame_rate</code> - Initial frame rate in FPS (typically 10-160)</li>
+<li><code>frame_rate</code> - Target refresh rate in FPS</li>
 </ul>
-<h5 id="initial-state"><a class="doc-anchor" href="#initial-state">§</a>Initial State</h5>
+<h5 id="returns"><a class="doc-anchor" href="#returns">§</a>Returns</h5>
+<p>PWM tick time in microseconds</p>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.new" class="method"><a class="src rightside" href="../../src/mb2_embassy_rgb/rgb.rs.html#99-107">Source</a><h4 class="code-header">pub fn <a href="#method.new" class="fn">new</a>(rgb: [<a class="struct" href="../../embassy_nrf/gpio/struct.Output.html" title="struct embassy_nrf::gpio::Output">Output</a>&lt;'static, <a class="struct" href="../../embassy_nrf/gpio/struct.AnyPin.html" title="struct embassy_nrf::gpio::AnyPin">AnyPin</a>&gt;; <a class="primitive" href="https://doc.rust-lang.org/1.85.1/core/primitive.array.html">3</a>], frame_rate: <a class="primitive" href="https://doc.rust-lang.org/1.85.1/core/primitive.u64.html">u64</a>) -&gt; Self</h4></section></summary><div class="docblock"><p>Creates a new RGB controller.</p>
+<h5 id="arguments-1"><a class="doc-anchor" href="#arguments-1">§</a>Arguments</h5>
 <ul>
-<li>All RGB levels set to 0 (LEDs off)</li>
-<li>Tick time calculated for the provided frame rate</li>
-<li>Frame rate tracking initialized</li>
+<li><code>rgb</code> - Array of GPIO output pins [red, green, blue]</li>
+<li><code>frame_rate</code> - Initial frame rate in FPS</li>
 </ul>
-<h5 id="examples-1"><a class="doc-anchor" href="#examples-1">§</a>Examples</h5>
-<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">let </span>led_pin = |p| Output::new(p, Level::Low, OutputDrive::Standard);
-<span class="kw">let </span>rgb_pins = [
-    led_pin(AnyPin::from(board.p9)),  <span class="comment">// Red
-    </span>led_pin(AnyPin::from(board.p8)),  <span class="comment">// Green  
-    </span>led_pin(AnyPin::from(board.p16)), <span class="comment">// Blue
-</span>];
-<span class="kw">let </span>rgb = Rgb::new(rgb_pins, <span class="number">60</span>); <span class="comment">// 60 FPS</span></code></pre></div>
-<h5 id="hardware-requirements"><a class="doc-anchor" href="#hardware-requirements">§</a>Hardware Requirements</h5>
-<ul>
-<li>GPIO pins must be configured as outputs with appropriate drive strength</li>
-<li>LEDs should be connected with appropriate current limiting resistors</li>
-<li>Pin assignments should match the expected RGB order</li>
-</ul>
-</div></details><details class="toggle method-toggle" open><summary><section id="method.step" class="method"><a class="src rightside" href="../../src/mb2_embassy_rgb/rgb.rs.html#223-236">Source</a><h4 class="code-header">async fn <a href="#method.step" class="fn">step</a>(&amp;mut self, led: <a class="primitive" href="https://doc.rust-lang.org/1.85.1/core/primitive.usize.html">usize</a>)</h4></section></summary><div class="docblock"><p>Executes one PWM cycle for a single LED.</p>
+<h5 id="examples"><a class="doc-anchor" href="#examples">§</a>Examples</h5>
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">let </span>rgb_pins = [red_pin, green_pin, blue_pin];
+<span class="kw">let </span>rgb = Rgb::new(rgb_pins, <span class="number">60</span>);</code></pre></div>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.step" class="method"><a class="src rightside" href="../../src/mb2_embassy_rgb/rgb.rs.html#143-156">Source</a><h4 class="code-header">async fn <a href="#method.step" class="fn">step</a>(&amp;mut self, led: <a class="primitive" href="https://doc.rust-lang.org/1.85.1/core/primitive.usize.html">usize</a>)</h4></section></summary><div class="docblock"><p>Executes one PWM cycle for a single LED.</p>
 <p>This is the core PWM implementation that controls LED brightness through
 time-based on/off control. The LED is turned on for a duration proportional
 to the desired intensity, then turned off for the remaining time.</p>
-<h5 id="pwm-algorithm-1"><a class="doc-anchor" href="#pwm-algorithm-1">§</a>PWM Algorithm</h5>
+<h5 id="pwm-algorithm"><a class="doc-anchor" href="#pwm-algorithm">§</a>PWM Algorithm</h5>
 <ol>
 <li><strong>On Phase</strong>: Turn LED on for <code>(intensity * tick_time)</code> microseconds</li>
 <li><strong>Off Phase</strong>: Turn LED off for <code>((LEVELS - intensity) * tick_time)</code> microseconds</li>
 </ol>
-<h5 id="arguments-1"><a class="doc-anchor" href="#arguments-1">§</a>Arguments</h5>
+<h5 id="arguments-2"><a class="doc-anchor" href="#arguments-2">§</a>Arguments</h5>
 <ul>
 <li><code>led</code> - LED index (0=Red, 1=Green, 2=Blue)</li>
 </ul>
@@ -110,7 +47,7 @@ to the desired intensity, then turned off for the remaining time.</p>
 <li><strong>Intensity 15</strong>: LED stays on for full cycle</li>
 <li><strong>Intensity 8</strong>: LED on for 50% of cycle time</li>
 </ul>
-<h5 id="examples-2"><a class="doc-anchor" href="#examples-2">§</a>Examples</h5>
+<h5 id="examples-1"><a class="doc-anchor" href="#examples-1">§</a>Examples</h5>
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="comment">// For intensity level 10 out of 15:
 // ON time:  10 * tick_time microseconds
 // OFF time: 5 * tick_time microseconds  
@@ -121,41 +58,17 @@ to the desired intensity, then turned off for the remaining time.</p>
 <li>Skips timing delays when intensity is 0 or max for efficiency</li>
 <li>Each call completes one full PWM cycle for the specified LED</li>
 </ul>
-</div></details><details class="toggle method-toggle" open><summary><section id="method.run" class="method"><a class="src rightside" href="../../src/mb2_embassy_rgb/rgb.rs.html#282-296">Source</a><h4 class="code-header">pub async fn <a href="#method.run" class="fn">run</a>(self) -&gt; <a class="primitive" href="https://doc.rust-lang.org/1.85.1/core/primitive.never.html">!</a></h4></section></summary><div class="docblock"><p>Main RGB control loop with dynamic frame rate and real-time updates.</p>
-<p>This is the primary entry point for RGB LED control. It runs continuously,
-managing PWM cycles for all three LEDs while monitoring for changes in
-RGB levels and frame rate from the shared state system.</p>
-<h5 id="operation-flow"><a class="doc-anchor" href="#operation-flow">§</a>Operation Flow</h5>
-<p>Each iteration performs:</p>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.run" class="method"><a class="src rightside" href="../../src/mb2_embassy_rgb/rgb.rs.html#174-188">Source</a><h4 class="code-header">pub async fn <a href="#method.run" class="fn">run</a>(self) -&gt; <a class="primitive" href="https://doc.rust-lang.org/1.85.1/core/primitive.never.html">!</a></h4></section></summary><div class="docblock"><p>Main RGB control loop.</p>
+<p>Continuously updates RGB levels and frame rate from shared state,
+then executes PWM cycles for all three LEDs.</p>
+<h5 id="operation"><a class="doc-anchor" href="#operation">§</a>Operation</h5>
 <ol>
-<li><strong>State Sync</strong>: Update RGB levels from shared state</li>
-<li><strong>Frame Rate Check</strong>: Detect frame rate changes and recalculate timing</li>
-<li><strong>PWM Execution</strong>: Execute PWM cycles for all three LEDs in sequence</li>
-<li><strong>Repeat</strong>: Continue indefinitely for smooth LED control</li>
+<li>Read current RGB levels from shared state</li>
+<li>Check for frame rate changes and update timing if needed</li>
+<li>Execute PWM cycle for each LED in sequence</li>
+<li>Repeat</li>
 </ol>
-<h5 id="real-time-features"><a class="doc-anchor" href="#real-time-features">§</a>Real-Time Features</h5>
-<ul>
-<li><strong>RGB Updates</strong>: Immediate response to RGB level changes from UI</li>
-<li><strong>Frame Rate Changes</strong>: Dynamic timing recalculation when FPS changes</li>
-<li><strong>Smooth Transitions</strong>: Continuous operation without frame drops</li>
-<li><strong>Efficient Updates</strong>: Only recalculates timing when frame rate actually changes</li>
-</ul>
-<h5 id="performance-characteristics-1"><a class="doc-anchor" href="#performance-characteristics-1">§</a>Performance Characteristics</h5>
-<ul>
-<li><strong>Memory</strong>: Minimal shared state access (once per frame)</li>
-<li><strong>CPU</strong>: Efficient change detection for frame rate updates</li>
-<li><strong>Timing</strong>: Microsecond-precision PWM with async timers</li>
-<li><strong>Latency</strong>: Immediate response to RGB changes, frame-rate response to timing changes</li>
-</ul>
-<h5 id="shared-state-integration"><a class="doc-anchor" href="#shared-state-integration">§</a>Shared State Integration</h5>
-<p>Reads from two shared state sources:</p>
-<ul>
-<li><code>get_rgb_levels()</code>: RGB intensity values [0-15] for each color</li>
-<li><code>get_frame_rate()</code>: Current display refresh rate [10-160 FPS]</li>
-</ul>
-<h5 id="examples-3"><a class="doc-anchor" href="#examples-3">§</a>Examples</h5>
-<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">let </span>rgb = Rgb::new(rgb_pins, <span class="number">60</span>);
-rgb.run().<span class="kw">await</span>; <span class="comment">// Start RGB control (never returns)</span></code></pre></div>
+<p>This function never returns under normal operation.</p>
 <h5 id="never-returns"><a class="doc-anchor" href="#never-returns">§</a>Never Returns</h5>
 <p>This function runs indefinitely under normal operation. It will only
 exit if the hardware fails or the system panics.</p>

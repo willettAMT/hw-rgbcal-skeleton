@@ -223,20 +223,65 @@
 <a href="#222" id="222">222</a>
 <a href="#223" id="223">223</a>
 <a href="#224" id="224">224</a>
-<a href="#225" id="225">225</a></pre></div><pre class="rust"><code><span class="kw">use crate</span>::<span class="kw-2">*</span>;
+<a href="#225" id="225">225</a>
+<a href="#226" id="226">226</a>
+<a href="#227" id="227">227</a>
+<a href="#228" id="228">228</a>
+<a href="#229" id="229">229</a>
+<a href="#230" id="230">230</a>
+<a href="#231" id="231">231</a>
+<a href="#232" id="232">232</a>
+<a href="#233" id="233">233</a>
+<a href="#234" id="234">234</a>
+<a href="#235" id="235">235</a>
+<a href="#236" id="236">236</a>
+<a href="#237" id="237">237</a>
+<a href="#238" id="238">238</a>
+<a href="#239" id="239">239</a>
+<a href="#240" id="240">240</a>
+<a href="#241" id="241">241</a>
+<a href="#242" id="242">242</a>
+<a href="#243" id="243">243</a>
+<a href="#244" id="244">244</a>
+<a href="#245" id="245">245</a>
+<a href="#246" id="246">246</a>
+<a href="#247" id="247">247</a>
+<a href="#248" id="248">248</a>
+<a href="#249" id="249">249</a>
+<a href="#250" id="250">250</a>
+<a href="#251" id="251">251</a>
+<a href="#252" id="252">252</a>
+<a href="#253" id="253">253</a>
+<a href="#254" id="254">254</a>
+<a href="#255" id="255">255</a></pre></div><pre class="rust"><code><span class="doccomment">//! # User Interface Module
+//!
+//! This module handles user input processing using a knob (potentiometer) and
+//! two buttons to control RGB LED parameters and frame rate.
+//!
+//! ## Control Scheme
+//!
+//! - **No buttons**: Knob controls frame rate (10-160 FPS)
+//! - **Button A**: Knob controls blue LED intensity (0-15)
+//! - **Button B**: Knob controls green LED intensity (0-15)  
+//! - **Both buttons**: Knob controls red LED intensity (0-15)
+</span><span class="kw">use crate</span>::<span class="kw-2">*</span>;
 
-<span class="doccomment">/// Represents which parameter the knob is currently controlling
+<span class="doccomment">/// Represents which parameter the knob is currently controlling.
 </span><span class="attr">#[derive(Debug, Clone, Copy, PartialEq)]
 </span><span class="kw">enum </span>ControlParameter {
-    FrameRate, <span class="comment">// No buttons
-    </span>Blue,      <span class="comment">// A button
-    </span>Green,     <span class="comment">// B button
-    </span>Red,       <span class="comment">// A+B buttons
-</span>}
+    <span class="doccomment">/// Frame rate control (no buttons pressed)
+    </span>FrameRate,
+    <span class="doccomment">/// Blue LED intensity (button A pressed)
+    </span>Blue,
+    <span class="doccomment">/// Green LED intensity (button B pressed)
+    </span>Green,
+    <span class="doccomment">/// Red LED intensity (both buttons pressed)
+    </span>Red,
+}
 
 <span class="doccomment">/// Internal state for th e UI control system.
 ///
-/// This struct maintains the current values for all controallbe parameters.
+/// This struct maintains the current values for all controllable parameters.
 /// It serves as a local cache to minimize shared state access and provides
 /// the source of truth for UI display.
 ///
@@ -261,9 +306,9 @@
     /// - Index 1: Green intensity (0 = off, 15 = maximum)
     /// - Index 2: Blue intensity (0 = off, 15 = maximum)
     </span>levels: [u32; <span class="number">3</span>],
-    <span class="doccomment">/// Display refresh rate in frames per second 910-160 FPS).
+    <span class="doccomment">/// Display refresh rate in frames per second (10-160 FPS).
     ///
-    /// Controls how freqwuently the RGB LEDs are update. Higher values
+    /// Controls how frequently the RGB LEDs are update. Higher values
     /// provide smoother visual transitions but increase power consumption.
     </span>frame_rate: u64,
 }
@@ -309,8 +354,11 @@
         }
     }
 }
-
-<span class="kw">pub struct </span>Ui {
+<span class="doccomment">/// User interface controller that processes knob and button inputs.
+///
+/// Manages the mapping between button states and controllable parameters,
+/// reads knob values, and updates shared state for the RGB controller.
+</span><span class="kw">pub struct </span>Ui {
     knob: Knob,
     button_a: Button,
     button_b: Button,
@@ -319,7 +367,11 @@
 }
 
 <span class="kw">impl </span>Ui {
-    <span class="kw">pub fn </span>new(knob: Knob, button_a: Button, button_b: Button) -&gt; <span class="self">Self </span>{
+    <span class="doccomment">/// User interface controller that processes knob and button inputs.
+    ///
+    /// Manages the mapping between button states and controllable parameters,
+    /// reads knob values, and updates shared state for the RGB controller.
+    </span><span class="kw">pub fn </span>new(knob: Knob, button_a: Button, button_b: Button) -&gt; <span class="self">Self </span>{
         <span class="self">Self </span>{
             knob,
             button_a,
@@ -328,7 +380,14 @@
             current_parameter: ControlParameter::FrameRate,
         }
     }
-    <span class="doccomment">/// Read the current button state and determine which parameter to control
+    <span class="doccomment">/// Reads button state and determines which parameter to control.
+    ///
+    /// # Returns
+    /// The active control parameter based on button combination:
+    /// - No buttons: Frame rate
+    /// - A only: Blue LED
+    /// - B only: Green LED  
+    /// - A + B: Red LED
     </span><span class="kw">fn </span>read_button_state(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; ControlParameter {
         <span class="kw">let </span>a_pressed = <span class="self">self</span>.button_a.is_low();
         <span class="kw">let </span>b_pressed = <span class="self">self</span>.button_b.is_low();
@@ -340,7 +399,16 @@
             </span>(<span class="bool-val">true</span>, <span class="bool-val">true</span>) =&gt; ControlParameter::Red,         <span class="comment">// Both A+B buttons
         </span>}
     }
-    <span class="doccomment">/// Map knob value (0-15) to appropriate parameter value
+    <span class="doccomment">/// Maps knob value (0-15) to appropriate parameter range.
+    ///
+    /// # Arguments
+    /// * `knob_value` - Raw knob reading (0-15)
+    /// * `parameter` - Target parameter to map to
+    ///
+    /// # Returns
+    /// Mapped value in the appropriate range:
+    /// - Frame rate: 10-160 FPS
+    /// - RGB: 0-15 (unchanged)
     </span><span class="kw">fn </span>map_knob_value(<span class="kw-2">&amp;</span><span class="self">self</span>, knob_value: u32, parameter: ControlParameter) -&gt; u32 {
         <span class="kw">match </span>parameter {
             ControlParameter::FrameRate =&gt; <span class="number">10 </span>+ (knob_value * <span class="number">10</span>),
@@ -352,15 +420,7 @@
     /// This is the primary entry point for the UI system. It runs continuously,
     /// processing button and knob inputs, managing parameter selection, and
     /// synchronizing state with the RGB display system.
-    ///
-    /// # Operation Flow
-    ///
-    /// 1. **Parameter Detection**: Check button state to determine active parameter
-    /// 2. **Value Mapping**: Read knob input and map to appropriate value range
-    /// 3. **Change Detection**: Only update state when values actually change
-    /// 4. **State Synchronization**: Update shared state for RGB display system
-    /// 5. **User Feedback**: Display current values and active parameter
-    ///
+
     /// # Value Ranges
     ///
     /// - **RGB Parameters**: 0-15 (mapped from knob input)
